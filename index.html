@@ -1,7 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -12,21 +15,26 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
 
 <header class="site-header">
+
     <div class="header-left">
         <h1>COUNTY LITERATURE</h1>
         <p>A SHARED MATERIAL LIBRARY</p>
     </div>
+
 </header>
 
 
 <main class="main-layout">
 
-    <!-- =========================
+
+    <!-- =====================================
          MATERIAL LIBRARY
-    ========================== -->
+    ====================================== -->
+
     <section class="library">
 
         <div class="library-header">
@@ -36,6 +44,7 @@
                 <p>COLLECT · CLASSIFY · REUSE</p>
             </div>
 
+
             <div class="upload-area">
 
                 <select id="uploadCategory">
@@ -44,7 +53,9 @@
                     <option value="buildings">BUILDINGS</option>
                 </select>
 
-                <!-- Hidden file inputs -->
+
+                <!-- Camera -->
+
                 <input
                     type="file"
                     id="cameraInput"
@@ -53,6 +64,9 @@
                     hidden
                 >
 
+
+                <!-- Album -->
+
                 <input
                     type="file"
                     id="albumInput"
@@ -60,11 +74,19 @@
                     hidden
                 >
 
-                <button id="takePhotoBtn" type="button">
+
+                <button
+                    id="takePhotoBtn"
+                    type="button"
+                >
                     + TAKE PHOTO
                 </button>
 
-                <button id="fromAlbumBtn" type="button">
+
+                <button
+                    id="fromAlbumBtn"
+                    type="button"
+                >
                     + FROM ALBUM
                 </button>
 
@@ -73,9 +95,10 @@
         </div>
 
 
-        <!-- =========================
+
+        <!-- =====================================
              PEOPLE
-        ========================== -->
+        ====================================== -->
 
         <section
             class="material-category"
@@ -86,30 +109,48 @@
                 <span>PEOPLE</span>
             </div>
 
+
             <div
                 class="material-grid"
                 id="peopleMaterials"
             >
 
-                <!-- Static Material 01 -->
+
+                <!-- PEOPLE 01 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="people-01"
                 >
 
                     <img
-                        src="images/people-01.jpg"
+                        src="images/person01.png"
                         alt="People 01"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people" selected>PEOPLE</option>
-                            <option value="objects">OBJECTS</option>
-                            <option value="buildings">BUILDINGS</option>
+
+                            <option
+                                value="people"
+                                selected
+                            >
+                                PEOPLE
+                            </option>
+
+                            <option value="objects">
+                                OBJECTS
+                            </option>
+
+                            <option value="buildings">
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -123,25 +164,42 @@
                 </div>
 
 
-                <!-- Static Material 02 -->
+
+                <!-- PEOPLE 02 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="people-02"
                 >
 
                     <img
-                        src="images/people-02.jpg"
+                        src="images/person02.png"
                         alt="People 02"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people" selected>PEOPLE</option>
-                            <option value="objects">OBJECTS</option>
-                            <option value="buildings">BUILDINGS</option>
+
+                            <option
+                                value="people"
+                                selected
+                            >
+                                PEOPLE
+                            </option>
+
+                            <option value="objects">
+                                OBJECTS
+                            </option>
+
+                            <option value="buildings">
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -155,25 +213,42 @@
                 </div>
 
 
-                <!-- Static Material 03 -->
+
+                <!-- PEOPLE 03 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="people-03"
                 >
 
                     <img
-                        src="images/people-03.jpg"
+                        src="images/person03.png"
                         alt="People 03"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people" selected>PEOPLE</option>
-                            <option value="objects">OBJECTS</option>
-                            <option value="buildings">BUILDINGS</option>
+
+                            <option
+                                value="people"
+                                selected
+                            >
+                                PEOPLE
+                            </option>
+
+                            <option value="objects">
+                                OBJECTS
+                            </option>
+
+                            <option value="buildings">
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -191,9 +266,10 @@
         </section>
 
 
-        <!-- =========================
+
+        <!-- =====================================
              OBJECTS
-        ========================== -->
+        ====================================== -->
 
         <section
             class="material-category"
@@ -204,30 +280,48 @@
                 <span>OBJECTS</span>
             </div>
 
+
             <div
                 class="material-grid"
                 id="objectsMaterials"
             >
 
-                <!-- Static Material 01 -->
+
+                <!-- OBJECTS 01 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="objects-01"
                 >
 
                     <img
-                        src="images/objects-01.jpg"
+                        src="images/object01.png"
                         alt="Objects 01"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people">PEOPLE</option>
-                            <option value="objects" selected>OBJECTS</option>
-                            <option value="buildings">BUILDINGS</option>
+
+                            <option value="people">
+                                PEOPLE
+                            </option>
+
+                            <option
+                                value="objects"
+                                selected
+                            >
+                                OBJECTS
+                            </option>
+
+                            <option value="buildings">
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -241,25 +335,42 @@
                 </div>
 
 
-                <!-- Static Material 02 -->
+
+                <!-- OBJECTS 02 -->
+
                 <div
                     class="material-card static-material"
-                    data-static-id="objects-02"
+                    data-static-id="objects02"
                 >
 
                     <img
-                        src="images/objects-02.jpg"
+                        src="images/object02.png"
                         alt="Objects 02"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people">PEOPLE</option>
-                            <option value="objects" selected>OBJECTS</option>
-                            <option value="buildings">BUILDINGS</option>
+
+                            <option value="people">
+                                PEOPLE
+                            </option>
+
+                            <option
+                                value="objects"
+                                selected
+                            >
+                                OBJECTS
+                            </option>
+
+                            <option value="buildings">
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -273,25 +384,42 @@
                 </div>
 
 
-                <!-- Static Material 03 -->
+
+                <!-- OBJECTS 03 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="objects-03"
                 >
 
                     <img
-                        src="images/objects-03.jpg"
+                        src="images/object03.png"
                         alt="Objects 03"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people">PEOPLE</option>
-                            <option value="objects" selected>OBJECTS</option>
-                            <option value="buildings">BUILDINGS</option>
+
+                            <option value="people">
+                                PEOPLE
+                            </option>
+
+                            <option
+                                value="objects"
+                                selected
+                            >
+                                OBJECTS
+                            </option>
+
+                            <option value="buildings">
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -309,9 +437,10 @@
         </section>
 
 
-        <!-- =========================
+
+        <!-- =====================================
              BUILDINGS
-        ========================== -->
+        ====================================== -->
 
         <section
             class="material-category"
@@ -322,30 +451,48 @@
                 <span>BUILDINGS</span>
             </div>
 
+
             <div
                 class="material-grid"
                 id="buildingsMaterials"
             >
 
-                <!-- Static Material 01 -->
+
+                <!-- BUILDINGS 01 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="buildings-01"
                 >
 
                     <img
-                        src="images/buildings-01.jpg"
+                        src="images/building01.png"
                         alt="Buildings 01"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people">PEOPLE</option>
-                            <option value="objects">OBJECTS</option>
-                            <option value="buildings" selected>BUILDINGS</option>
+
+                            <option value="people">
+                                PEOPLE
+                            </option>
+
+                            <option value="objects">
+                                OBJECTS
+                            </option>
+
+                            <option
+                                value="buildings"
+                                selected
+                            >
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -359,25 +506,42 @@
                 </div>
 
 
-                <!-- Static Material 02 -->
+
+                <!-- BUILDINGS 02 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="buildings-02"
                 >
 
                     <img
-                        src="images/buildings-02.jpg"
+                        src="images/building02.png"
                         alt="Buildings 02"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people">PEOPLE</option>
-                            <option value="objects">OBJECTS</option>
-                            <option value="buildings" selected>BUILDINGS</option>
+
+                            <option value="people">
+                                PEOPLE
+                            </option>
+
+                            <option value="objects">
+                                OBJECTS
+                            </option>
+
+                            <option
+                                value="buildings"
+                                selected
+                            >
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -391,25 +555,42 @@
                 </div>
 
 
-                <!-- Static Material 03 -->
+
+                <!-- BUILDINGS 03 -->
+
                 <div
                     class="material-card static-material"
                     data-static-id="buildings-03"
                 >
 
                     <img
-                        src="images/buildings-03.jpg"
+                        src="images/building03.png"
                         alt="Buildings 03"
                         draggable="false"
                     >
 
+
                     <div class="material-menu">
 
                         <select class="material-category-select">
-                            <option value="people">PEOPLE</option>
-                            <option value="objects">OBJECTS</option>
-                            <option value="buildings" selected>BUILDINGS</option>
+
+                            <option value="people">
+                                PEOPLE
+                            </option>
+
+                            <option value="objects">
+                                OBJECTS
+                            </option>
+
+                            <option
+                                value="buildings"
+                                selected
+                            >
+                                BUILDINGS
+                            </option>
+
                         </select>
+
 
                         <button
                             type="button"
@@ -430,9 +611,9 @@
 
 
 
-    <!-- =========================
+    <!-- =====================================
          CANVAS
-    ========================== -->
+    ====================================== -->
 
     <section class="canvas-section">
 
@@ -442,6 +623,7 @@
                 <h2>CANVAS</h2>
                 <p>COMPOSE YOUR COUNTY</p>
             </div>
+
 
             <button
                 id="clearCanvasBtn"
@@ -467,10 +649,15 @@
 </main>
 
 
-<!-- Supabase -->
+
+<!-- =====================================
+     SUPABASE
+====================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="script.js"></script>
 
 </body>
-</html>
+
+
