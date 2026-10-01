@@ -1,0 +1,715 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f1ea;
+    color: #111;
+    overflow: hidden;
+}
+
+button,
+select {
+    font-family: inherit;
+}
+
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+    height: 74px;
+    border-bottom: 1px solid #111;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.header-left p {
+    margin: 4px 0 0;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+}
+
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.main-layout {
+    width: 100%;
+    height: calc(100vh - 74px);
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(360px, 38vw)
+        minmax(0, 1fr);
+}
+
+
+
+/* =========================================================
+   LIBRARY
+========================================================= */
+
+.library {
+    height: 100%;
+    min-width: 0;
+
+    border-right: 1px solid #111;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-bottom: 40px;
+}
+
+.library-header {
+    padding: 20px 20px 18px;
+
+    border-bottom: 1px solid #111;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 20px;
+}
+
+.library-header h2,
+.canvas-header h2 {
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+}
+
+.library-header p,
+.canvas-header p {
+    margin: 5px 0 0;
+
+    font-size: 9px;
+    letter-spacing: 0.14em;
+}
+
+
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+.upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+
+    min-width: 145px;
+}
+
+.upload-area select,
+.material-category-select {
+    height: 27px;
+
+    border: 1px solid #111;
+    border-radius: 0;
+
+    background: #f4f1ea;
+    color: #111;
+
+    padding: 0 7px;
+
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
+
+.upload-area button {
+    height: 27px;
+
+    border: 1px solid #111;
+    border-radius: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 10px;
+    letter-spacing: 0.05em;
+}
+
+.upload-area button:hover {
+    background: #111;
+    color: #f4f1ea;
+}
+
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+.material-category {
+    border-bottom: 1px solid #111;
+}
+
+.category-title {
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #111;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+}
+
+
+
+/* =========================================================
+   MATERIAL GRID
+========================================================= */
+
+.material-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    padding: 14px 14px 18px;
+}
+
+.material-card {
+    position: relative;
+
+    min-width: 0;
+
+    border: 1px solid #111;
+
+    background: #fff;
+
+    overflow: hidden;
+}
+
+.material-card img {
+    display: block;
+
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+.material-card img:hover {
+    opacity: 0.75;
+}
+
+
+
+/* =========================================================
+   MATERIAL MENU
+========================================================= */
+
+.material-menu {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    gap: 5px;
+
+    padding: 6px;
+
+    border-top: 1px solid #111;
+
+    background: #f4f1ea;
+}
+
+.material-category-select {
+    width: 100%;
+    min-width: 0;
+
+    font-size: 8px;
+}
+
+.material-delete {
+    height: 27px;
+
+    padding: 0 8px;
+
+    border: 1px solid #111;
+
+    background: transparent;
+
+    color: #111;
+
+    cursor: pointer;
+
+    font-size: 8px;
+    letter-spacing: 0.04em;
+}
+
+.material-delete:hover {
+    background: #111;
+    color: #f4f1ea;
+}
+
+
+
+/* =========================================================
+   CANVAS SECTION
+========================================================= */
+
+.canvas-section {
+    min-width: 0;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-header {
+    height: 65px;
+
+    flex-shrink: 0;
+
+    padding: 14px 20px;
+
+    border-bottom: 1px solid #111;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#clearCanvasBtn {
+    height: 30px;
+
+    padding: 0 14px;
+
+    border: 1px solid #111;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 10px;
+    letter-spacing: 0.08em;
+}
+
+#clearCanvasBtn:hover {
+    background: #111;
+    color: #f4f1ea;
+}
+
+
+
+/* =========================================================
+   CANVAS
+========================================================= */
+
+.canvas {
+    position: relative;
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.035) 1px,
+            transparent 1px
+        );
+
+    background-size: 20px 20px;
+}
+
+
+
+/* =========================================================
+   CANVAS ITEM
+========================================================= */
+
+.canvas-item {
+    position: absolute;
+
+    left: 80px;
+    top: 80px;
+
+    width: 160px;
+
+    transform-origin: center center;
+
+    user-select: none;
+
+    touch-action: none;
+
+    cursor: move;
+
+    z-index: 1;
+}
+
+.canvas-item img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    pointer-events: none;
+
+    user-select: none;
+}
+
+
+
+/* Selected canvas item */
+
+.canvas-item.selected {
+    outline: 1px dashed #111;
+    outline-offset: 3px;
+}
+
+
+
+/* =========================================================
+   CANVAS CONTROLS
+========================================================= */
+
+.canvas-control {
+    position: absolute;
+
+    display: none;
+
+    width: 25px;
+    height: 25px;
+
+    border: 1px solid #111;
+
+    background: #f4f1ea;
+
+    color: #111;
+
+    padding: 0;
+
+    cursor: pointer;
+
+    z-index: 20;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    line-height: 1;
+
+    user-select: none;
+}
+
+.canvas-item.selected .canvas-control {
+    display: flex;
+}
+
+.canvas-control:hover {
+    background: #111;
+    color: #f4f1ea;
+}
+
+
+
+/* Delete */
+
+.canvas-delete {
+    top: -31px;
+    right: -31px;
+}
+
+
+
+/* =========================================================
+   LAYER CONTROLS
+========================================================= */
+
+/* Bring to Front */
+
+.canvas-front {
+    top: -31px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Send to Back */
+
+.canvas-back {
+    bottom: -31px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Bring Forward */
+
+.canvas-forward {
+    top: 50%;
+    right: -31px;
+    transform: translateY(-50%);
+}
+
+/* Send Backward */
+
+.canvas-backward {
+    top: 50%;
+    left: -31px;
+    transform: translateY(-50%);
+}
+
+
+
+/* =========================================================
+   ROTATE
+========================================================= */
+
+.canvas-rotate {
+    top: -31px;
+    left: calc(50% + 34px);
+}
+
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+.canvas-resize {
+    right: -31px;
+    bottom: -31px;
+
+    cursor: nwse-resize;
+}
+
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    body {
+        overflow: hidden;
+    }
+
+    .site-header {
+        height: 60px;
+
+        padding: 0 14px;
+    }
+
+    .header-left h1 {
+        font-size: 17px;
+    }
+
+    .header-left p {
+        font-size: 8px;
+    }
+
+
+    .main-layout {
+        height: calc(100vh - 60px);
+
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    /* Library */
+
+    .library {
+        height: 62vh;
+
+        flex: 0 0 62vh;
+
+        border-right: none;
+        border-bottom: 1px solid #111;
+    }
+
+    .library-header {
+        padding: 14px;
+
+        gap: 10px;
+    }
+
+    .library-header h2,
+    .canvas-header h2 {
+        font-size: 12px;
+    }
+
+    .library-header p,
+    .canvas-header p {
+        font-size: 7px;
+    }
+
+
+    .upload-area {
+        min-width: 135px;
+    }
+
+    .upload-area select,
+    .upload-area button {
+        height: 25px;
+
+        font-size: 8px;
+    }
+
+
+    .category-title {
+        height: 32px;
+
+        padding: 0 14px;
+
+        font-size: 9px;
+    }
+
+
+    .material-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+
+        padding: 10px;
+    }
+
+
+    .material-menu {
+        grid-template-columns:
+            minmax(0, 1fr)
+            72px;
+
+        gap: 4px;
+
+        padding: 5px;
+    }
+
+    .material-category-select {
+        height: 25px;
+
+        font-size: 7px;
+    }
+
+    .material-delete {
+        height: 25px;
+
+        font-size: 7px;
+    }
+
+
+
+    /* Canvas */
+
+    .canvas-section {
+        height: 38vh;
+
+        flex: 0 0 38vh;
+    }
+
+    .canvas-header {
+        height: 48px;
+
+        padding: 9px 12px;
+    }
+
+    #clearCanvasBtn {
+        height: 25px;
+
+        padding: 0 10px;
+
+        font-size: 8px;
+    }
+
+
+    .canvas-item {
+        width: 120px;
+    }
+
+
+    .canvas-control {
+        width: 28px;
+        height: 28px;
+
+        font-size: 13px;
+    }
+
+
+    .canvas-delete {
+        top: -34px;
+        right: -34px;
+    }
+
+    .canvas-front {
+        top: -34px;
+    }
+
+    .canvas-back {
+        bottom: -34px;
+    }
+
+    .canvas-forward {
+        right: -34px;
+    }
+
+    .canvas-backward {
+        left: -34px;
+    }
+
+    .canvas-rotate {
+        top: -34px;
+        left: calc(50% + 38px);
+    }
+
+    .canvas-resize {
+        right: -34px;
+        bottom: -34px;
+    }
+}
