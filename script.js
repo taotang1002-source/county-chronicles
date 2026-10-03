@@ -471,6 +471,7 @@ function createUserMaterial(material) {
     const image =
         document.createElement("img");
 
+    image.crossOrigin = "anonymous";
     image.src =
         material.image_url;
 
@@ -1070,6 +1071,7 @@ function addImageToCanvas(
     const image =
         document.createElement("img");
 
+    image.crossOrigin = "anonymous";
     image.src =
         imageSrc;
 
@@ -2398,6 +2400,374 @@ document.addEventListener(
 );
 
 
+
+
+/* =========================================================
+   EXPORT CANVAS
+   Self-contained: creates the EXPORT button and loads
+   html2canvas automatically. No index.html/CSS edit needed.
+========================================================= */
+
+(function setupCanvasExport() {
+
+    if (!canvas || !clearCanvasBtn) {
+        return;
+    }
+
+    /* Create a small action wrapper if it does not exist. */
+    let actions =
+        clearCanvasBtn.parentElement &&
+        clearCanvasBtn.parentElement.classList.contains(
+            "canvas-actions"
+        )
+            ? clearCanvasBtn.parentElement
+            : null;
+
+    if (!actions) {
+        actions =
+            document.createElement("div");
+
+        actions.className =
+            "canvas-actions";
+
+        clearCanvasBtn.parentNode.insertBefore(
+            actions,
+            clearCanvasBtn
+        );
+
+        actions.appendChild(
+            clearCanvasBtn
+        );
+    }
+
+    let exportBtn =
+        document.getElementById(
+            "exportCanvasBtn"
+        );
+
+    if (!exportBtn) {
+
+        exportBtn =
+            document.createElement("button");
+
+        exportBtn.id =
+            "exportCanvasBtn";
+
+        exportBtn.type =
+            "button";
+
+        exportBtn.textContent =
+            "EXPORT";
+
+        actions.appendChild(
+            exportBtn
+        );
+    }
+
+    /* Minimal styling so this works without editing style.css. */
+    actions.style.display = "flex";
+    actions.style.alignItems = "center";
+    actions.style.gap = "6px";
+
+    exportBtn.style.height = "30px";
+    exportBtn.style.padding = "0 14px";
+    exportBtn.style.border = "1px solid #111";
+    exportBtn.style.background = "#111";
+    exportBtn.style.color = "#f4f1ea";
+    exportBtn.style.cursor = "pointer";
+    exportBtn.style.fontSize = "10px";
+    exportBtn.style.letterSpacing = "0.08em";
+
+    exportBtn.addEventListener(
+        "mouseenter",
+        () => {
+            exportBtn.style.background =
+                "transparent";
+            exportBtn.style.color =
+                "#111";
+        }
+    );
+
+    exportBtn.addEventListener(
+        "mouseleave",
+        () => {
+            exportBtn.style.background =
+                "#111";
+            exportBtn.style.color =
+                "#f4f1ea";
+        }
+    );
+
+    function loadHtml2Canvas() {
+
+        if (
+            typeof window.html2canvas ===
+            "function"
+        ) {
+            return Promise.resolve(
+                window.html2canvas
+            );
+        }
+
+        return new Promise(
+            (resolve, reject) => {
+
+                const existing =
+                    document.querySelector(
+                        'script[data-county-html2canvas="true"]'
+                    );
+
+                if (existing) {
+
+                    existing.addEventListener(
+                        "load",
+                        () => {
+                            if (
+                                typeof window.html2canvas ===
+                                "function"
+                            ) {
+                                resolve(
+                                    window.html2canvas
+                                );
+                            } else {
+                                reject(
+                                    new Error(
+                                        "html2canvas loaded but is unavailable."
+                                    )
+                                );
+                            }
+                        },
+                        { once: true }
+                    );
+
+                    existing.addEventListener(
+                        "error",
+                        () => {
+                            reject(
+                                new Error(
+                                    "Could not load html2canvas."
+                                )
+                            );
+                        },
+                        { once: true }
+                    );
+
+                    return;
+                }
+
+                const script =
+                    document.createElement(
+                        "script"
+                    );
+
+                script.src =
+                    "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+
+                script.async = true;
+
+                script.dataset.countyHtml2canvas =
+                    "true";
+
+                script.onload =
+                    () => {
+
+                        if (
+                            typeof window.html2canvas ===
+                            "function"
+                        ) {
+                            resolve(
+                                window.html2canvas
+                            );
+                        } else {
+                            reject(
+                                new Error(
+                                    "html2canvas is unavailable."
+                                )
+                            );
+                        }
+                    };
+
+                script.onerror =
+                    () => {
+                        reject(
+                            new Error(
+                                "Could not load html2canvas."
+                            )
+                        );
+                    };
+
+                document.head.appendChild(
+                    script
+                );
+            }
+        );
+    }
+
+    exportBtn.addEventListener(
+        "click",
+        async () => {
+
+            const originalText =
+                exportBtn.textContent;
+
+            exportBtn.disabled = true;
+            exportBtn.textContent =
+                "EXPORTING...";
+
+            try {
+
+                await loadHtml2Canvas();
+
+                /*
+                 * Remember current selection and inline background.
+                 */
+                const selectedItems =
+                    Array.from(
+                        document.querySelectorAll(
+                            ".canvas-item.selected"
+                        )
+                    );
+
+                const controls =
+                    Array.from(
+                        canvas.querySelectorAll(
+                            ".canvas-control"
+                        )
+                    );
+
+                const originalBackground =
+                    canvas.style.background;
+
+                /*
+                 * Hide editing UI during capture.
+                 */
+                selectedItems.forEach(
+                    item => {
+                        item.classList.remove(
+                            "selected"
+                        );
+                    }
+                );
+
+                controls.forEach(
+                    control => {
+                        control.style.visibility =
+                            "hidden";
+                    }
+                );
+
+                /*
+                 * Export a clean canvas without the editor grid.
+                 */
+                canvas.style.background =
+                    "#f4f1ea";
+
+                await new Promise(
+                    resolve =>
+                        requestAnimationFrame(
+                            () => requestAnimationFrame(
+                                resolve
+                            )
+                        )
+                );
+
+                const exportedCanvas =
+                    await window.html2canvas(
+                        canvas,
+                        {
+                            backgroundColor:
+                                "#f4f1ea",
+                            useCORS: true,
+                            allowTaint: false,
+                            scale: 2,
+                            logging: false
+                        }
+                    );
+
+                /*
+                 * Restore editor state.
+                 */
+                canvas.style.background =
+                    originalBackground;
+
+                controls.forEach(
+                    control => {
+                        control.style.visibility =
+                            "";
+                    }
+                );
+
+                selectedItems.forEach(
+                    item => {
+                        item.classList.add(
+                            "selected"
+                        );
+                    }
+                );
+
+                const dataURL =
+                    exportedCanvas.toDataURL(
+                        "image/png"
+                    );
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+                link.download =
+                    "county-literature.png";
+
+                link.href =
+                    dataURL;
+
+                document.body.appendChild(
+                    link
+                );
+
+                link.click();
+
+                link.remove();
+
+            } catch (error) {
+
+                console.error(
+                    "Canvas export failed:",
+                    error
+                );
+
+                alert(
+                    "Export failed. Please check your internet connection and try again."
+                );
+
+            } finally {
+
+                /*
+                 * Safety restore in case html2canvas throws.
+                 */
+                canvas.style.background = "";
+
+                canvas
+                    .querySelectorAll(
+                        ".canvas-control"
+                    )
+                    .forEach(
+                        control => {
+                            control.style.visibility =
+                                "";
+                        }
+                    );
+
+                exportBtn.disabled =
+                    false;
+
+                exportBtn.textContent =
+                    originalText;
+            }
+        }
+    );
+
+})();
 
 /* =========================================================
    INITIALIZATION
