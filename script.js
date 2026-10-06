@@ -34,6 +34,9 @@ const canvas =
 const clearCanvasBtn =
     document.getElementById("clearCanvasBtn");
 
+const makeAnotherCountyBtn =
+    document.getElementById("makeAnotherCountyBtn");
+
 const uploadCategory =
     document.getElementById("uploadCategory");
 
@@ -1931,6 +1934,7 @@ function enableCanvasDragging(
         }
     );
 }
+           
 
 
 
@@ -2314,6 +2318,903 @@ document.addEventListener(
 
 
 /* =========================================================
+   MAKE ANOTHER COUNTY
+   Automatically recombine materials from the shared library.
+   This does NOT delete or modify Supabase materials.
+========================================================= */
+
+const AUTO_COUNTY_SETTINGS = {
+    minimumItems: 6,
+    maximumItems: 9,
+
+    peopleMinimum: 1,
+    peopleMaximum: 2,
+
+    objectsMinimum: 2,
+    objectsMaximum: 3,
+
+    buildingsMinimum: 2,
+    buildingsMaximum: 3,
+
+    minimumWidth: 90,
+    maximumWidth: 280,
+
+    minimumRotation: -18,
+    maximumRotation: 18,
+
+    edgePadding: 24
+};
+
+
+/*
+ * Get all currently visible material cards.
+ *
+ * The category is read from the nearest
+ * .material-category[data-category] container.
+ *
+ * This works for both:
+ * - the original static materials
+ * - materials uploaded through Supabase
+ */
+function getAvailableCountyMaterials() {
+
+    const cards =
+        Array.from(
+            document.querySelectorAll(
+                ".material-card"
+            )
+        );
+
+    return cards
+        .map(card => {
+
+            const image =
+                card.querySelector("img");
+
+            if (!image || !image.src) {
+                return null;
+            }
+
+            const categoryContainer =
+                card.closest(
+                    ".material-category"
+                );
+
+            const category =
+                categoryContainer?.dataset.category ||
+                "people";
+
+            return {
+                src: image.src,
+                alt: image.alt || "Material",
+                category: category
+            };
+
+        })
+        .filter(Boolean);
+}
+
+
+/*
+ * Random number between min and max.
+ */
+function randomBetween(
+    min,
+    max
+) {
+    return (
+        Math.random() *
+            (max - min) +
+        min
+    );
+}
+
+
+/*
+ * Random integer between min and max.
+ */
+function randomInteger(
+    min,
+    max
+) {
+    return Math.floor(
+        Math.random() *
+            (max - min + 1)
+    ) + min;
+}
+
+
+/*
+ * Shuffle an array without changing the
+ * original array.
+ */
+function shuffleArray(
+    array
+) {
+
+    const result =
+        [...array];
+
+    for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                    (i + 1)
+            );
+
+
+        [
+            result[i],
+            result[j]
+        ] = [
+            result[j],
+            result[i]
+        ];
+    }
+
+    return result;
+}
+
+
+/*
+ * Randomly choose up to `count` unique materials.
+ */
+function chooseMaterials(
+    materials,
+    count
+) {
+
+    return shuffleArray(
+        materials
+    ).slice(
+        0,
+        Math.min(
+            count,
+            materials.length
+        )
+    );
+}
+
+
+/*
+ * Make sure the generated county has
+ * a reasonable mixture of:
+ *
+ * BUILDINGS = background / structural layer
+ * OBJECTS   = middle layer
+ * PEOPLE    = foreground / activity
+ */
+
+/*
+ * Make sure the generated county has
+ * a reasonable mixture of:
+ *
+ * BUILDINGS = background / structural layer
+ * OBJECTS   = middle layer
+ * PEOPLE    = foreground / activity
+ */
+function buildAutomaticCountySelection(
+    materials
+) {
+
+    const people =
+        materials.filter(
+            material =>
+                material.category ===
+                "people"
+        );
+
+    const objects =
+        materials.filter(
+            material =>
+                material.category ===
+                "objects"
+        );
+
+    const buildings =
+        materials.filter(
+            material =>
+                material.category ===
+                "buildings"
+        );
+
+    let selected = [];
+
+    /*
+     * First create the structural mix.
+     */
+    selected.push(
+        ...chooseMaterials(
+            people,
+            randomInteger(
+                AUTO_COUNTY_SETTINGS.peopleMinimum,
+                AUTO_COUNTY_SETTINGS.peopleMaximum
+            )
+        )
+    );
+
+    selected.push(
+        ...chooseMaterials(
+            objects,
+            randomInteger(
+                AUTO_COUNTY_SETTINGS.objectsMinimum,
+                AUTO_COUNTY_SETTINGS.objectsMaximum
+            )
+        )
+    );
+
+    selected.push(
+        ...chooseMaterials(
+            buildings,
+            randomInteger(
+                AUTO_COUNTY_SETTINGS.buildingsMinimum,
+                AUTO_COUNTY_SETTINGS.buildingsMaximum
+            )
+        )
+    );
+
+    /*
+     * If there are not enough materials in one
+     * category, fill the county from all materials.
+     */
+    if (
+        selected.length <
+        AUTO_COUNTY_SETTINGS.minimumItems
+    ) {
+
+        const alreadySelected =
+            new Set(
+                selected.map(
+                    material =>
+                        material.src
+                )
+            );
+
+        const remaining =
+            materials.filter(
+                material =>
+                    !alreadySelected.has(
+                        material.src
+                    )
+            );
+
+        selected.push(
+            ...chooseMaterials(
+                remaining,
+                AUTO_COUNTY_SETTINGS.minimumItems -
+                    selected.length
+            )
+        );
+    }
+
+    /*
+     * Limit the total number of materials.
+     */
+    const targetCount =
+        randomInteger(
+            AUTO_COUNTY_SETTINGS.minimumItems,
+            AUTO_COUNTY_SETTINGS.maximumItems
+        );
+
+    if (
+        selected.length >
+        targetCount
+    ) {
+        selected =
+            shuffleArray(
+                selected
+            ).slice(
+                0,
+                targetCount
+            );
+    }
+
+    /*
+     * If there are still fewer materials than
+     * the target, fill from unused materials.
+     */
+    if (
+        selected.length <
+        targetCount
+    ) {
+
+        const selectedSources =
+            new Set(
+                selected.map(
+                    material =>
+                        material.src
+                )
+            );
+
+        const remaining =
+            materials.filter(
+                material =>
+                    !selectedSources.has(
+                        material.src
+                    )
+            );
+
+        selected.push(
+            ...chooseMaterials(
+                remaining,
+                targetCount -
+                    selected.length
+            )
+        );
+    }
+
+    return selected;
+}
+
+
+/*
+ * Apply automatic position, size, rotation,
+ * and layer order.
+ */
+
+function placeAutomaticCountyItem(
+    item,
+    material,
+    index,
+    total
+) {
+
+    const canvasWidth =
+        canvas.clientWidth;
+
+
+    const canvasHeight =
+        canvas.clientHeight;
+
+
+    /*
+     * Buildings tend to be larger and lower,
+     * creating a loose "county scene".
+     */
+
+    let width;
+
+
+    if (
+        material.category ===
+        "buildings"
+    ) {
+
+        width =
+            randomBetween(
+                180,
+                AUTO_COUNTY_SETTINGS.maximumWidth
+            );
+
+    } else if (
+        material.category ===
+        "people"
+    ) {
+
+        width =
+            randomBetween(
+                100,
+                190
+            );
+
+    } else {
+
+        width =
+            randomBetween(
+                AUTO_COUNTY_SETTINGS.minimumWidth,
+                210
+            );
+    }
+
+
+    /*
+     * Keep the item inside a reasonable
+     * portion of the canvas.
+     */
+
+    width =
+        Math.min(
+            width,
+            Math.max(
+                60,
+                canvasWidth -
+                    AUTO_COUNTY_SETTINGS.edgePadding * 2
+            )
+        );
+
+
+    item.style.width =
+        `${width}px`;
+
+
+    /*
+     * Force a browser layout so that the
+     * actual item dimensions are available.
+     */
+
+    const itemWidth =
+        item.offsetWidth || width;
+
+
+    const itemHeight =
+        item.offsetHeight ||
+        width;
+
+
+    const maxLeft =
+        Math.max(
+            AUTO_COUNTY_SETTINGS.edgePadding,
+            canvasWidth -
+                itemWidth -
+                AUTO_COUNTY_SETTINGS.edgePadding
+        );
+
+
+    const maxTop =
+        Math.max(
+            AUTO_COUNTY_SETTINGS.edgePadding,
+            canvasHeight -
+                itemHeight -
+                AUTO_COUNTY_SETTINGS.edgePadding
+        );
+
+
+    let left;
+    let top;
+
+
+    if (
+        material.category ===
+        "buildings"
+    ) {
+
+        /*
+         * Buildings stay mostly toward the
+         * lower / background area.
+         */
+
+        left =
+            randomBetween(
+                AUTO_COUNTY_SETTINGS.edgePadding,
+                maxLeft
+            );
+
+
+        top =
+            randomBetween(
+                Math.max(
+                    AUTO_COUNTY_SETTINGS.edgePadding,
+                    canvasHeight * 0.35
+                ),
+                maxTop
+            );
+
+    } else if (
+        material.category ===
+        "people"
+    ) {
+
+        /*
+         * People are more likely to appear
+         * in the middle of the scene.
+         */
+
+        left =
+            randomBetween(
+                canvasWidth * 0.15,
+                Math.max(
+                    canvasWidth * 0.15,
+                    maxLeft
+                )
+            );
+
+
+        top =
+            randomBetween(
+                canvasHeight * 0.20,
+                Math.max(
+                    canvasHeight * 0.20,
+                    maxTop
+                )
+            );
+
+    } else {
+
+        /*
+         * Objects can appear almost anywhere,
+         * between buildings and people.
+         */
+
+        left =
+            randomBetween(
+                AUTO_COUNTY_SETTINGS.edgePadding,
+                maxLeft
+            );
+
+
+        top =
+            randomBetween(
+                canvasHeight * 0.20,
+                Math.max(
+                    canvasHeight * 0.20,
+                    maxTop
+                )
+            );
+    }
+
+
+    /*
+     * Clamp values so that unusual image
+     * dimensions do not push the item outside.
+     */
+
+    left =
+        Math.max(
+            AUTO_COUNTY_SETTINGS.edgePadding,
+            Math.min(
+                left,
+                maxLeft
+            )
+        );
+
+
+    top =
+        Math.max(
+            AUTO_COUNTY_SETTINGS.edgePadding,
+            Math.min(
+                top,
+                maxTop
+            )
+        );
+
+
+    item.style.left =
+        `${left}px`;
+
+
+    item.style.top =
+        `${top}px`;
+
+
+    /*
+     * Small random rotation.
+     */
+
+    item.dataset.rotation =
+        randomBetween(
+            AUTO_COUNTY_SETTINGS.minimumRotation,
+            AUTO_COUNTY_SETTINGS.maximumRotation
+        );
+
+
+    /*
+     * Keep scale at 1 because the actual
+     * width already controls the size.
+     */
+
+    item.dataset.scale =
+        "1";
+
+
+    updateCanvasTransform(
+        item
+    );
+
+
+    /*
+     * Layer order:
+     * buildings behind,
+     * objects in the middle,
+     * people in front.
+     *
+     * The small random offset keeps the
+     * result from becoming completely fixed.
+     */
+
+    let baseLayer;
+
+
+    if (
+        material.category ===
+        "buildings"
+    ) {
+
+        baseLayer = 10;
+
+    } else if (
+        material.category ===
+        "objects"
+    ) {
+
+        baseLayer = 100;
+
+    } else {
+
+        baseLayer = 200;
+    }
+
+
+    item.style.zIndex =
+        baseLayer +
+        index +
+        randomInteger(
+            0,
+            20
+        );
+}
+    
+
+
+/*
+ * Main function.
+ *
+ * MAKE ANOTHER COUNTY:
+ *
+ * 1. Read the current shared material library.
+ * 2. Choose a new combination.
+ * 3. Clear only the current canvas.
+ * 4. Add the chosen materials.
+ * 5. Randomly construct a new county.
+ *
+ * Supabase data is NOT changed.
+ */
+async function makeAnotherCounty() {
+
+    if (!canvas) {
+        return;
+    }
+
+    const materials =
+        getAvailableCountyMaterials();
+
+    if (!materials.length) {
+        alert(
+            "No materials are available yet."
+        );
+        return;
+    }
+
+    /*
+     * Select a new combination.
+     */
+    const selectedMaterials =
+        buildAutomaticCountySelection(
+            materials
+        );
+
+    if (!selectedMaterials.length) {
+        alert(
+            "Not enough materials to make another county."
+        );
+        return;
+    }
+
+    /*
+     * Remove only the items currently
+     * displayed on the canvas.
+     *
+     * This does NOT remove material cards,
+     * uploaded files, or Supabase records.
+     */
+    canvas
+        .querySelectorAll(
+            ".canvas-item"
+        )
+        .forEach(
+            item => item.remove()
+        );
+
+    selectedCanvasItem =
+        null;
+
+    highestZIndex =
+        1;
+
+    /*
+     * Shuffle once more so the visual order
+     * changes every time the button is pressed.
+     */
+    const shuffledMaterials =
+        shuffleArray(
+            selectedMaterials
+        );
+
+    /*
+     * Add each material using the existing
+     * canvas system. This preserves all
+     * existing controls:
+     *
+     * DELETE
+     * BRING TO FRONT
+     * BRING FORWARD
+     * SEND BACKWARD
+     * SEND TO BACK
+     * ROTATE
+     * RESIZE
+     */
+    shuffledMaterials.forEach(
+        (material, index) => {
+
+            addImageToCanvas(
+                material.src,
+                material.alt
+            );
+
+            const items =
+                canvas.querySelectorAll(
+                    ".canvas-item"
+                );
+
+            const item =
+                items[
+                    items.length - 1
+                ];
+
+            if (!item) {
+                return;
+            }
+
+            placeAutomaticCountyItem(
+                item,
+                material,
+                index,
+                shuffledMaterials.length
+            );
+        }
+    );
+
+    /*
+     * The automatic generator should present
+     * the result as a finished county, not as
+     * an actively selected editing object.
+     */
+    deselectAllCanvasItems();
+}
+
+
+/*
+ * If the HTML already contains the button,
+ * use it directly.
+ *
+ * If it does not, create it automatically
+ * next to CLEAR.
+ *
+ * This makes this JavaScript compatible with
+ * both the original index.html and the
+ * modified MAKE ANOTHER COUNTY index.html.
+ */
+function setupMakeAnotherCountyButton() {
+
+    if (!canvas || !clearCanvasBtn) {
+        return;
+    }
+
+    let button =
+        document.getElementById(
+            "makeAnotherCountyBtn"
+        );
+
+    if (!button) {
+
+        button =
+            document.createElement(
+                "button"
+            );
+
+        button.id =
+            "makeAnotherCountyBtn";
+
+        button.type =
+            "button";
+
+        button.textContent =
+            "MAKE ANOTHER COUNTY";
+
+        /*
+         * Put the new button before CLEAR.
+         */
+        clearCanvasBtn.parentNode.insertBefore(
+            button,
+            clearCanvasBtn
+        );
+    }
+
+    /*
+     * Prevent duplicate event listeners
+     * if this function is ever called again.
+     */
+    if (
+        button.dataset.countyButtonBound ===
+        "true"
+    ) {
+        return;
+    }
+
+    button.dataset.countyButtonBound =
+        "true";
+
+    button.addEventListener(
+        "click",
+        async () => {
+
+            button.disabled =
+                true;
+
+            const originalText =
+                button.textContent;
+
+            button.textContent =
+                "MAKING COUNTY...";
+
+            try {
+                await makeAnotherCounty();
+
+            } catch (error) {
+
+                console.error(
+                    "MAKE ANOTHER COUNTY failed:",
+                    error
+                );
+
+                alert(
+                    "Could not make another county."
+                );
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    originalText;
+            }
+        }
+    );
+}
+
+
+/* =========================================================
+   CLEAR CANVAS
+========================================================= */
+
+clearCanvasBtn.addEventListener(
+    "click",
+    () => {
+
+        const confirmed =
+            window.confirm(
+                "Clear all elements from the canvas?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        document
+            .querySelectorAll(
+                ".canvas-item"
+            )
+            .forEach(
+                item => {
+                    item.remove();
+                }
+            );
+
+        selectedCanvasItem =
+            null;
+
+        highestZIndex =
+            1;
+    }
+);
+
+
+/* =========================================================
    CLEAR CANVAS
 ========================================================= */
 
@@ -2398,7 +3299,6 @@ document.addEventListener(
 
     }
 );
-
 
 
 
@@ -2783,6 +3683,11 @@ async function initialize() {
 
     bindStaticMaterials();
 
+
+    /*
+     * MAKE ANOTHER COUNTY button.
+     */
+    setupMakeAnotherCountyButton();
 
     /*
      * Upload buttons.
