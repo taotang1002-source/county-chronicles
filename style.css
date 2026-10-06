@@ -15,14 +15,20 @@ body {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
     background: #f4f1ea;
     color: #111;
+
     overflow: hidden;
 }
 
 button,
-select {
+select,
+input {
     font-family: inherit;
 }
 
@@ -34,22 +40,29 @@ select {
 
 .site-header {
     height: 74px;
+
     border-bottom: 1px solid #111;
+
     display: flex;
     align-items: center;
+
     padding: 0 24px;
 }
 
 .header-left h1 {
     margin: 0;
+
     font-size: 22px;
     font-weight: 700;
+
     letter-spacing: 0.04em;
 }
 
 .header-left p {
     margin: 4px 0 0;
+
     font-size: 10px;
+
     letter-spacing: 0.16em;
 }
 
@@ -78,6 +91,7 @@ select {
 
 .library {
     height: 100%;
+
     min-width: 0;
 
     border-right: 1px solid #111;
@@ -89,15 +103,18 @@ select {
 }
 
 .library-header {
-    padding: 20px 20px 18px;
+    padding: 20px;
 
     border-bottom: 1px solid #111;
 
     display: flex;
+
     justify-content: space-between;
     align-items: flex-start;
 
-    gap: 20px;
+    gap: 12px;
+
+    min-width: 0;
 }
 
 .library-header h2,
@@ -115,6 +132,7 @@ select {
     margin: 5px 0 0;
 
     font-size: 9px;
+
     letter-spacing: 0.14em;
 }
 
@@ -125,42 +143,59 @@ select {
 ========================================================= */
 
 .upload-area {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
+    display: grid;
 
-    min-width: 145px;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 4px;
+
+    min-width: 0;
+
+    width: 185px;
+
+    max-width: 185px;
+
+    flex: 0 1 185px;
 }
 
 .upload-area select,
-.material-category-select {
-    height: 27px;
-
-    border: 1px solid #111;
-    border-radius: 0;
-
-    background: #f4f1ea;
-    color: #111;
-
-    padding: 0 7px;
-
-    font-size: 10px;
-    letter-spacing: 0.04em;
-}
-
 .upload-area button {
-    height: 27px;
+    height: 26px;
+
+    min-width: 0;
 
     border: 1px solid #111;
-    border-radius: 0;
 
     background: transparent;
 
+    color: #111;
+
+    padding: 0 6px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.04em;
+
     cursor: pointer;
 
-    font-size: 10px;
-    letter-spacing: 0.05em;
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: clip;
+}
+
+.upload-area select {
+    grid-column:
+        1 / -1;
+
+    width: 100%;
+}
+
+.upload-area button {
+    width: 100%;
 }
 
 .upload-area button:hover {
@@ -188,7 +223,8 @@ select {
 
     border-bottom: 1px solid #111;
 
-    font-size: 11px;
+    font-size: 10px;
+
     font-weight: 700;
 
     letter-spacing: 0.12em;
@@ -206,38 +242,35 @@ select {
     grid-template-columns:
         repeat(3, minmax(0, 1fr));
 
-    gap: 12px;
+    gap: 10px;
 
-    padding: 14px 14px 18px;
+    padding: 12px;
 }
 
 .material-card {
-    position: relative;
-
     min-width: 0;
 
     border: 1px solid #111;
 
-    background: #fff;
+    background: #f4f1ea;
 
     overflow: hidden;
 }
 
 .material-card img {
-    display: block;
-
     width: 100%;
+
+    height: auto;
+
     aspect-ratio: 1 / 1;
 
-    object-fit: cover;
+    object-fit: contain;
+
+    display: block;
+
+    background: #f4f1ea;
 
     cursor: pointer;
-
-    user-select: none;
-}
-
-.material-card img:hover {
-    opacity: 0.75;
 }
 
 
@@ -247,32 +280,25 @@ select {
 ========================================================= */
 
 .material-menu {
-    display: grid;
+    display: flex;
 
-    grid-template-columns:
-        minmax(0, 1fr)
-        auto;
+    align-items: center;
 
-    gap: 5px;
+    gap: 4px;
 
-    padding: 6px;
+    padding: 5px;
 
     border-top: 1px solid #111;
-
-    background: #f4f1ea;
 }
 
 .material-category-select {
-    width: 100%;
+    flex: 1 1 auto;
+
     min-width: 0;
 
-    font-size: 8px;
-}
+    width: 0;
 
-.material-delete {
-    height: 27px;
-
-    padding: 0 8px;
+    height: 24px;
 
     border: 1px solid #111;
 
@@ -280,14 +306,46 @@ select {
 
     color: #111;
 
-    cursor: pointer;
+    padding: 0 5px;
 
-    font-size: 8px;
+    font-size: 7px;
+
     letter-spacing: 0.04em;
+
+    cursor: pointer;
+}
+
+.material-delete {
+    flex: 0 0 26px;
+
+    width: 26px;
+
+    height: 24px;
+
+    padding: 0;
+
+    border: 1px solid #111;
+
+    background: transparent;
+
+    color: #111;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
+
+    line-height: 1;
+
+    cursor: pointer;
 }
 
 .material-delete:hover {
     background: #111;
+
     color: #f4f1ea;
 }
 
@@ -299,44 +357,78 @@ select {
 
 .canvas-section {
     min-width: 0;
+
+    min-height: 0;
+
     height: 100%;
 
     display: flex;
+
     flex-direction: column;
 }
 
 .canvas-header {
-    height: 65px;
+    height: 74px;
 
-    flex-shrink: 0;
+    flex: 0 0 74px;
 
-    padding: 14px 20px;
+    padding: 16px 20px;
 
     border-bottom: 1px solid #111;
 
     display: flex;
+
+    align-items: flex-start;
+
     justify-content: space-between;
-    align-items: center;
+
+    gap: 20px;
 }
 
-#clearCanvasBtn {
+
+
+/* =========================================================
+   CANVAS ACTIONS
+========================================================= */
+
+.canvas-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+.canvas-actions button {
     height: 30px;
 
-    padding: 0 14px;
+    padding: 0 12px;
 
     border: 1px solid #111;
 
-    background: transparent;
+    background: #111;
+
+    color: #f4f1ea;
+
+    font-size: 9px;
+
+    letter-spacing: 0.06em;
 
     cursor: pointer;
 
-    font-size: 10px;
-    letter-spacing: 0.08em;
+    white-space: nowrap;
 }
 
-#clearCanvasBtn:hover {
-    background: #111;
-    color: #f4f1ea;
+.canvas-actions button:hover {
+    background: transparent;
+
+    color: #111;
+}
+
+.canvas-actions button:disabled {
+    opacity: 0.45;
+
+    cursor: default;
 }
 
 
@@ -352,20 +444,26 @@ select {
 
     min-height: 0;
 
+    width: 100%;
+
     overflow: hidden;
 
-    background:
+    background-color: #f4f1ea;
+
+    background-image:
         linear-gradient(
-            rgba(0, 0, 0, 0.035) 1px,
+            rgba(17, 17, 17, 0.06) 1px,
             transparent 1px
         ),
         linear-gradient(
             90deg,
-            rgba(0, 0, 0, 0.035) 1px,
+            rgba(17, 17, 17, 0.06) 1px,
             transparent 1px
         );
 
     background-size: 20px 20px;
+
+    touch-action: none;
 }
 
 
@@ -377,10 +475,14 @@ select {
 .canvas-item {
     position: absolute;
 
-    left: 80px;
-    top: 80px;
+    width: 180px;
 
-    width: 160px;
+    left: 50px;
+    top: 50px;
+
+    transform:
+        rotate(0deg)
+        scale(1);
 
     transform-origin: center center;
 
@@ -388,28 +490,32 @@ select {
 
     touch-action: none;
 
-    cursor: move;
+    cursor: grab;
 
     z-index: 1;
+}
+
+.canvas-item:active {
+    cursor: grabbing;
 }
 
 .canvas-item img {
     display: block;
 
     width: 100%;
+
     height: auto;
 
-    pointer-events: none;
-
     user-select: none;
+
+    pointer-events: auto;
+
+    -webkit-user-drag: none;
 }
-
-
-
-/* Selected canvas item */
 
 .canvas-item.selected {
     outline: 1px dashed #111;
+
     outline-offset: 3px;
 }
 
@@ -422,10 +528,17 @@ select {
 .canvas-control {
     position: absolute;
 
+    width: 26px;
+
+    height: 26px;
+
+    padding: 0;
+
     display: none;
 
-    width: 25px;
-    height: 25px;
+    align-items: center;
+
+    justify-content: center;
 
     border: 1px solid #111;
 
@@ -433,17 +546,13 @@ select {
 
     color: #111;
 
-    padding: 0;
+    font-size: 12px;
+
+    line-height: 1;
 
     cursor: pointer;
 
-    z-index: 20;
-
-    align-items: center;
-    justify-content: center;
-
-    font-size: 12px;
-    line-height: 1;
+    z-index: 1000;
 
     user-select: none;
 }
@@ -454,54 +563,44 @@ select {
 
 .canvas-control:hover {
     background: #111;
+
     color: #f4f1ea;
 }
 
 
 
-/* Delete */
+/* =========================================================
+   DELETE
+========================================================= */
 
 .canvas-delete {
-    top: -31px;
-    right: -31px;
+    top: -34px;
+
+    right: -34px;
 }
 
 
 
 /* =========================================================
-   LAYER CONTROLS
+   FORWARD / BACKWARD
 ========================================================= */
-
-/* Bring to Front */
-
-.canvas-front {
-    top: -31px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-/* Send to Back */
-
-.canvas-back {
-    bottom: -31px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-/* Bring Forward */
 
 .canvas-forward {
     top: 50%;
-    right: -31px;
-    transform: translateY(-50%);
-}
 
-/* Send Backward */
+    right: -34px;
+
+    transform:
+        translateY(-50%);
+}
 
 .canvas-backward {
     top: 50%;
-    left: -31px;
-    transform: translateY(-50%);
+
+    left: -34px;
+
+    transform:
+        translateY(-50%);
 }
 
 
@@ -511,8 +610,9 @@ select {
 ========================================================= */
 
 .canvas-rotate {
-    top: -31px;
-    left: calc(50% + 34px);
+    top: -34px;
+
+    left: calc(50% + 40px);
 }
 
 
@@ -522,10 +622,150 @@ select {
 ========================================================= */
 
 .canvas-resize {
-    right: -31px;
-    bottom: -31px;
+    right: -34px;
+
+    bottom: -34px;
 
     cursor: nwse-resize;
+}
+
+
+
+/* =========================================================
+   DIALOGUE
+========================================================= */
+
+.dialogue-item {
+    width: 230px;
+
+    cursor: grab;
+}
+
+.dialogue-box {
+    width: 100%;
+
+    min-height: 70px;
+
+    padding: 14px;
+
+    border: 2px solid #111;
+
+    background: rgba(
+        244,
+        241,
+        234,
+        0.94
+    );
+
+    color: #111;
+
+    font-size: 14px;
+
+    line-height: 1.35;
+
+    font-weight: 700;
+
+    letter-spacing: 0.02em;
+
+    outline: none;
+
+    cursor: text;
+
+    user-select: text;
+
+    touch-action: auto;
+
+    word-break: break-word;
+}
+
+.dialogue-box:focus {
+    outline: none;
+}
+
+
+
+/* =========================================================
+   DIALOGUE STYLE PANEL
+========================================================= */
+
+.dialogue-style-panel {
+    position: absolute;
+
+    right: 14px;
+
+    bottom: 14px;
+
+    width: 150px;
+
+    padding: 10px;
+
+    border: 1px solid #111;
+
+    background: #f4f1ea;
+
+    z-index: 5000;
+
+    display: none;
+}
+
+.dialogue-style-panel.visible {
+    display: block;
+}
+
+.dialogue-style-title {
+    margin-bottom: 8px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+}
+
+.dialogue-style-panel label {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-top: 6px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.06em;
+}
+
+.dialogue-style-panel input[type="color"] {
+    width: 30px;
+
+    height: 22px;
+
+    padding: 0;
+
+    border: 1px solid #111;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.library::-webkit-scrollbar {
+    width: 8px;
+}
+
+.library::-webkit-scrollbar-track {
+    background: #f4f1ea;
+}
+
+.library::-webkit-scrollbar-thumb {
+    background: #111;
 }
 
 
@@ -540,15 +780,18 @@ select {
         overflow: hidden;
     }
 
+
     .site-header {
         height: 60px;
 
         padding: 0 14px;
     }
 
+
     .header-left h1 {
         font-size: 17px;
     }
+
 
     .header-left p {
         font-size: 8px;
@@ -559,31 +802,38 @@ select {
         height: calc(100vh - 60px);
 
         display: flex;
+
         flex-direction: column;
     }
 
 
-    /* Library */
+    /* ---------------------------------------------
+       Library
+    ---------------------------------------------- */
 
     .library {
-        height: 62vh;
+        height: 60vh;
 
-        flex: 0 0 62vh;
+        flex: 0 0 60vh;
 
         border-right: none;
+
         border-bottom: 1px solid #111;
     }
 
-    .library-header {
-        padding: 14px;
 
-        gap: 10px;
+    .library-header {
+        padding: 12px;
+
+        gap: 8px;
     }
+
 
     .library-header h2,
     .canvas-header h2 {
         font-size: 12px;
     }
+
 
     .library-header p,
     .canvas-header p {
@@ -592,23 +842,34 @@ select {
 
 
     .upload-area {
-        min-width: 135px;
+        width: 145px;
+
+        max-width: 145px;
+
+        min-width: 0;
+
+        flex: 0 1 145px;
+
+        gap: 3px;
     }
+
 
     .upload-area select,
     .upload-area button {
-        height: 25px;
+        height: 24px;
 
-        font-size: 8px;
+        font-size: 7px;
+
+        padding: 0 5px;
     }
 
 
     .category-title {
-        height: 32px;
+        height: 30px;
 
-        padding: 0 14px;
+        padding: 0 12px;
 
-        font-size: 9px;
+        font-size: 8px;
     }
 
 
@@ -616,56 +877,78 @@ select {
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
 
-        gap: 9px;
+        gap: 8px;
 
-        padding: 10px;
+        padding: 9px;
     }
 
 
     .material-menu {
-        grid-template-columns:
-            minmax(0, 1fr)
-            72px;
+        display: flex;
 
-        gap: 4px;
+        gap: 3px;
 
-        padding: 5px;
+        padding: 4px;
     }
+
 
     .material-category-select {
-        height: 25px;
+        flex: 1 1 auto;
 
-        font-size: 7px;
+        min-width: 0;
+
+        width: 0;
+
+        height: 23px;
+
+        font-size: 6px;
+
+        padding: 0 4px;
     }
+
 
     .material-delete {
-        height: 25px;
+        flex: 0 0 25px;
 
-        font-size: 7px;
+        width: 25px;
+
+        height: 23px;
+
+        font-size: 14px;
     }
 
 
-
-    /* Canvas */
+    /* ---------------------------------------------
+       Canvas
+    ---------------------------------------------- */
 
     .canvas-section {
-        height: 38vh;
+        height: 40vh;
 
-        flex: 0 0 38vh;
+        flex: 0 0 40vh;
     }
+
 
     .canvas-header {
-        height: 48px;
+        height: 50px;
 
-        padding: 9px 12px;
+        flex: 0 0 50px;
+
+        padding: 8px 10px;
     }
 
-    #clearCanvasBtn {
+
+    .canvas-actions {
+        gap: 3px;
+    }
+
+
+    .canvas-actions button {
         height: 25px;
 
-        padding: 0 10px;
+        padding: 0 7px;
 
-        font-size: 8px;
+        font-size: 7px;
     }
 
 
@@ -675,41 +958,65 @@ select {
 
 
     .canvas-control {
-        width: 28px;
-        height: 28px;
+        width: 27px;
 
-        font-size: 13px;
+        height: 27px;
+
+        font-size: 12px;
     }
 
 
     .canvas-delete {
         top: -34px;
+
         right: -34px;
     }
 
-    .canvas-front {
-        top: -34px;
-    }
-
-    .canvas-back {
-        bottom: -34px;
-    }
 
     .canvas-forward {
         right: -34px;
     }
 
+
     .canvas-backward {
         left: -34px;
     }
 
+
     .canvas-rotate {
         top: -34px;
-        left: calc(50% + 38px);
+
+        left: calc(50% + 39px);
     }
+
 
     .canvas-resize {
         right: -34px;
+
         bottom: -34px;
     }
+
+
+    .dialogue-item {
+        width: 150px;
+    }
+
+
+    .dialogue-box {
+        min-height: 55px;
+
+        padding: 9px;
+
+        font-size: 10px;
+    }
+
+
+    .dialogue-style-panel {
+        right: 8px;
+
+        bottom: 8px;
+
+        width: 130px;
+    }
+
 }

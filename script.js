@@ -1,20 +1,18 @@
 /* =========================================================
+   COUNTY LITERATURE
+   FINAL SCRIPT
+========================================================= */
+
+
+/* =========================================================
    SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
     "https://tvnpwthcdqqabxpvodfe.supabase.co";
 
-/*
- * IMPORTANT:
- * Replace this with your CURRENT working Supabase Publishable
- * / anon key.
- *
- * Do NOT use an old key containing an accidental space.
- */
 const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2bnB3dGhjZHFxYWJ4cHZvZGZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NDEzOTEsImV4cCI6MjEwNjQxNzM5MX0.RoKsPXxUgvmH8rzEK7SKSAos8DQD5lMoz8U_hc57Tdc";
-
+    "sb_publishable_1xhO1Dg9VoHWq96dEiLs4A_B8Oqq_xI";
 
 const supabaseClient =
     window.supabase.createClient(
@@ -23,35 +21,69 @@ const supabaseClient =
     );
 
 
-
 /* =========================================================
    DOM
 ========================================================= */
 
 const canvas =
-    document.getElementById("canvas");
+    document.getElementById(
+        "canvas"
+    );
 
 const clearCanvasBtn =
-    document.getElementById("clearCanvasBtn");
+    document.getElementById(
+        "clearCanvasBtn"
+    );
 
 const makeAnotherCountyBtn =
-    document.getElementById("makeAnotherCountyBtn");
+    document.getElementById(
+        "makeAnotherCountyBtn"
+    );
+
+const addDialogueBtn =
+    document.getElementById(
+        "addDialogueBtn"
+    );
 
 const uploadCategory =
-    document.getElementById("uploadCategory");
+    document.getElementById(
+        "uploadCategory"
+    );
 
 const cameraInput =
-    document.getElementById("cameraInput");
+    document.getElementById(
+        "cameraInput"
+    );
 
 const albumInput =
-    document.getElementById("albumInput");
+    document.getElementById(
+        "albumInput"
+    );
 
 const takePhotoBtn =
-    document.getElementById("takePhotoBtn");
+    document.getElementById(
+        "takePhotoBtn"
+    );
 
 const fromAlbumBtn =
-    document.getElementById("fromAlbumBtn");
+    document.getElementById(
+        "fromAlbumBtn"
+    );
 
+const dialogueStylePanel =
+    document.getElementById(
+        "dialogueStylePanel"
+    );
+
+const dialogueTextColor =
+    document.getElementById(
+        "dialogueTextColor"
+    );
+
+const dialogueBorderColor =
+    document.getElementById(
+        "dialogueBorderColor"
+    );
 
 
 /* =========================================================
@@ -59,11 +91,34 @@ const fromAlbumBtn =
 ========================================================= */
 
 const categoryContainers = {
-    people: document.getElementById("peopleMaterials"),
-    objects: document.getElementById("objectsMaterials"),
-    buildings: document.getElementById("buildingsMaterials")
+
+    people:
+        document.getElementById(
+            "peopleMaterials"
+        ),
+
+    objects:
+        document.getElementById(
+            "objectsMaterials"
+        ),
+
+    buildings:
+        document.getElementById(
+            "buildingsMaterials"
+        )
+
 };
 
+
+/* =========================================================
+   CANVAS STATE
+========================================================= */
+
+let selectedCanvasItem =
+    null;
+
+let highestZIndex =
+    1;
 
 
 /* =========================================================
@@ -72,7 +127,6 @@ const categoryContainers = {
 
 const STATIC_STATE_KEY =
     "county-literature-static-materials";
-
 
 let staticMaterialState =
     loadStaticMaterialState();
@@ -83,13 +137,19 @@ function loadStaticMaterialState() {
     try {
 
         const saved =
-            localStorage.getItem(STATIC_STATE_KEY);
+            localStorage.getItem(
+                STATIC_STATE_KEY
+            );
 
         if (!saved) {
+
             return {};
+
         }
 
-        return JSON.parse(saved);
+        return JSON.parse(
+            saved
+        );
 
     } catch (error) {
 
@@ -99,7 +159,9 @@ function loadStaticMaterialState() {
         );
 
         return {};
+
     }
+
 }
 
 
@@ -109,7 +171,9 @@ function saveStaticMaterialState() {
 
         localStorage.setItem(
             STATIC_STATE_KEY,
-            JSON.stringify(staticMaterialState)
+            JSON.stringify(
+                staticMaterialState
+            )
         );
 
     } catch (error) {
@@ -118,134 +182,172 @@ function saveStaticMaterialState() {
             "Failed to save static material state:",
             error
         );
+
     }
+
 }
 
 
-
 /* =========================================================
-   INITIALIZE STATIC MATERIALS
+   STATIC MATERIALS
 ========================================================= */
 
 function applyStaticMaterialState() {
 
     document
-        .querySelectorAll(".static-material")
-        .forEach(card => {
+        .querySelectorAll(
+            ".static-material"
+        )
+        .forEach(
+            card => {
 
-            const id =
-                card.dataset.staticId;
+                const id =
+                    card.dataset.staticId;
 
-            const saved =
-                staticMaterialState[id];
+                const saved =
+                    staticMaterialState[id];
 
-            if (!saved) {
-                return;
-            }
+                if (!saved) {
 
+                    return;
 
-            if (saved.deleted) {
-
-                card.remove();
-
-                return;
-            }
+                }
 
 
-            if (saved.category) {
+                if (
+                    saved.deleted
+                ) {
 
-                moveCardToCategoryContainer(
-                    card,
+                    card.remove();
+
+                    return;
+
+                }
+
+
+                if (
                     saved.category
-                );
+                ) {
 
-                const select =
-                    card.querySelector(
-                        ".material-category-select"
+                    moveCardToCategoryContainer(
+                        card,
+                        saved.category
                     );
 
-                if (select) {
-                    select.value =
-                        saved.category;
+
+                    const select =
+                        card.querySelector(
+                            ".material-category-select"
+                        );
+
+
+                    if (select) {
+
+                        select.value =
+                            saved.category;
+
+                    }
+
                 }
+
             }
-        });
+        );
+
 }
 
 
 function bindStaticMaterials() {
 
     document
-        .querySelectorAll(".static-material")
-        .forEach(card => {
+        .querySelectorAll(
+            ".static-material"
+        )
+        .forEach(
+            card => {
 
-            const image =
-                card.querySelector("img");
+                const image =
+                    card.querySelector(
+                        "img"
+                    );
 
-            const select =
-                card.querySelector(
-                    ".material-category-select"
-                );
+                const select =
+                    card.querySelector(
+                        ".material-category-select"
+                    );
 
-            const deleteBtn =
-                card.querySelector(
-                    ".material-delete"
-                );
+                const deleteBtn =
+                    card.querySelector(
+                        ".material-delete"
+                    );
 
 
-            /* Add to Canvas */
+                if (image) {
 
-            if (image) {
+                    image.addEventListener(
+                        "click",
+                        event => {
 
-                image.addEventListener(
-                    "click",
-                    () => {
+                            event.stopPropagation();
 
-                        addImageToCanvas(
-                            image.src,
-                            image.alt
-                        );
+                            const category =
+                                card.closest(
+                                    ".material-category"
+                                )?.dataset.category ||
+                                "people";
 
-                    }
-                );
+
+                            addImageToCanvas(
+                                image.src,
+                                image.alt,
+                                {
+                                    category:
+                                        category
+                                }
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                if (select) {
+
+                    select.addEventListener(
+                        "change",
+                        event => {
+
+                            moveStaticMaterial(
+                                card,
+                                event.target.value
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                if (deleteBtn) {
+
+                    deleteBtn.addEventListener(
+                        "click",
+                        event => {
+
+                            event.stopPropagation();
+
+                            deleteStaticMaterial(
+                                card
+                            );
+
+                        }
+                    );
+
+                }
+
             }
+        );
 
-
-            /* Change category */
-
-            if (select) {
-
-                select.addEventListener(
-                    "change",
-                    event => {
-
-                        moveStaticMaterial(
-                            card,
-                            event.target.value
-                        );
-
-                    }
-                );
-            }
-
-
-            /* Delete */
-
-            if (deleteBtn) {
-
-                deleteBtn.addEventListener(
-                    "click",
-                    () => {
-
-                        deleteStaticMaterial(
-                            card
-                        );
-
-                    }
-                );
-            }
-
-        });
 }
 
 
@@ -259,8 +361,13 @@ function moveStaticMaterial(
 
 
     staticMaterialState[id] = {
-        category: category,
-        deleted: false
+
+        category:
+            category,
+
+        deleted:
+            false
+
     };
 
 
@@ -271,6 +378,7 @@ function moveStaticMaterial(
         card,
         category
     );
+
 }
 
 
@@ -280,28 +388,47 @@ function moveCardToCategoryContainer(
 ) {
 
     const container =
-        categoryContainers[category];
+        categoryContainers[
+            category
+        ];
 
     if (!container) {
+
         return;
+
     }
 
-    container.appendChild(card);
+
+    container.appendChild(
+        card
+    );
+
 }
 
 
-function deleteStaticMaterial(card) {
+function deleteStaticMaterial(
+    card
+) {
 
     const id =
         card.dataset.staticId;
 
 
-    staticMaterialState[id] = {
-        category:
-            card.closest(".material-category")
-                ?.dataset.category || "people",
+    const currentCategory =
+        card.closest(
+            ".material-category"
+        )?.dataset.category ||
+        "people";
 
-        deleted: true
+
+    staticMaterialState[id] = {
+
+        category:
+            currentCategory,
+
+        deleted:
+            true
+
     };
 
 
@@ -309,12 +436,12 @@ function deleteStaticMaterial(card) {
 
 
     card.remove();
+
 }
 
 
-
 /* =========================================================
-   SUPABASE AUTH
+   AUTH
 ========================================================= */
 
 async function ensureAnonymousAuth() {
@@ -322,16 +449,21 @@ async function ensureAnonymousAuth() {
     try {
 
         const {
-            data: sessionData
+            data:
+                sessionData
         } =
-            await supabaseClient.auth.getSession();
+            await supabaseClient
+                .auth
+                .getSession();
 
 
         if (
             sessionData &&
             sessionData.session
         ) {
+
             return sessionData.session;
+
         }
 
 
@@ -339,17 +471,20 @@ async function ensureAnonymousAuth() {
             data,
             error
         } =
-            await supabaseClient.auth.signInAnonymously();
+            await supabaseClient
+                .auth
+                .signInAnonymously();
 
 
         if (error) {
 
             console.error(
-                "Anonymous auth failed:",
+                "Anonymous authentication failed:",
                 error
             );
 
             return null;
+
         }
 
 
@@ -358,14 +493,15 @@ async function ensureAnonymousAuth() {
     } catch (error) {
 
         console.error(
-            "Auth error:",
+            "Authentication error:",
             error
         );
 
         return null;
-    }
-}
 
+    }
+
+}
 
 
 /* =========================================================
@@ -386,7 +522,8 @@ async function loadMaterials() {
                 .order(
                     "created_at",
                     {
-                        ascending: true
+                        ascending:
+                            true
                     }
                 );
 
@@ -399,65 +536,83 @@ async function loadMaterials() {
             );
 
             return;
+
         }
 
 
-        /*
-         * Remove only previously loaded dynamic materials.
-         * Static materials are NOT touched.
-         */
-
         document
-            .querySelectorAll(".user-material")
-            .forEach(card => {
-                card.remove();
-            });
+            .querySelectorAll(
+                ".user-material"
+            )
+            .forEach(
+                card => {
+
+                    card.remove();
+
+                }
+            );
 
 
         if (!data) {
+
             return;
+
         }
 
 
-        data.forEach(material => {
+        data.forEach(
+            material => {
 
-            createUserMaterial(
-                material
-            );
+                createUserMaterial(
+                    material
+                );
 
-        });
+            }
+        );
 
     } catch (error) {
 
         console.error(
-            "Sync materials failed:",
+            "Material loading error:",
             error
         );
-    }
-}
 
+    }
+
+}
 
 
 /* =========================================================
    CREATE USER MATERIAL
 ========================================================= */
 
-function createUserMaterial(material) {
+function createUserMaterial(
+    material
+) {
 
     const category =
-        material.category || "people";
+        material.category ||
+        "people";
 
 
     const container =
-        categoryContainers[category];
+        categoryContainers[
+            category
+        ];
+
 
     if (!container) {
+
         return;
+
     }
 
 
     const card =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     card.className =
         "material-card user-material";
@@ -468,18 +623,28 @@ function createUserMaterial(material) {
 
 
     card.dataset.storagePath =
-        material.storage_path || "";
+        material.storage_path ||
+        "";
 
 
     const image =
-        document.createElement("img");
+        document.createElement(
+            "img"
+        );
 
-    image.crossOrigin = "anonymous";
+
+    image.crossOrigin =
+        "anonymous";
+
+
     image.src =
         material.image_url;
 
+
     image.alt =
-        material.name || "Uploaded material";
+        material.name ||
+        "Uploaded material";
+
 
     image.draggable =
         false;
@@ -487,11 +652,18 @@ function createUserMaterial(material) {
 
     image.addEventListener(
         "click",
-        () => {
+        event => {
+
+            event.stopPropagation();
 
             addImageToCanvas(
                 image.src,
-                image.alt
+                image.alt,
+                {
+                    category:
+                        material.category ||
+                        "people"
+                }
             );
 
         }
@@ -504,40 +676,68 @@ function createUserMaterial(material) {
         );
 
 
-    card.appendChild(image);
-    card.appendChild(menu);
+    card.appendChild(
+        image
+    );
 
-    container.appendChild(card);
+
+    card.appendChild(
+        menu
+    );
+
+
+    container.appendChild(
+        card
+    );
+
 }
-
 
 
 /* =========================================================
    MATERIAL MENU
 ========================================================= */
 
-function createMaterialMenu(material) {
+function createMaterialMenu(
+    material
+) {
 
     const menu =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     menu.className =
         "material-menu";
 
 
-    /* Category select */
-
     const select =
-        document.createElement("select");
+        document.createElement(
+            "select"
+        );
+
 
     select.className =
         "material-category-select";
 
 
     const categories = [
-        ["people", "PEOPLE"],
-        ["objects", "OBJECTS"],
-        ["buildings", "BUILDINGS"]
+
+        [
+            "people",
+            "PEOPLE"
+        ],
+
+        [
+            "objects",
+            "OBJECTS"
+        ],
+
+        [
+            "buildings",
+            "BUILDINGS"
+        ]
+
     ];
 
 
@@ -545,26 +745,37 @@ function createMaterialMenu(material) {
         ([value, label]) => {
 
             const option =
-                document.createElement("option");
+                document.createElement(
+                    "option"
+                );
+
 
             option.value =
                 value;
 
+
             option.textContent =
                 label;
 
+
             if (
                 value ===
-                (material.category || "people")
+                (
+                    material.category ||
+                    "people"
+                )
             ) {
 
                 option.selected =
                     true;
+
             }
+
 
             select.appendChild(
                 option
             );
+
         }
     );
 
@@ -582,24 +793,39 @@ function createMaterialMenu(material) {
     );
 
 
-    /* Delete button */
-
     const deleteBtn =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
+
 
     deleteBtn.type =
         "button";
 
+
     deleteBtn.className =
         "material-delete";
 
+
     deleteBtn.textContent =
-        "DELETE";
+        "×";
+
+
+    deleteBtn.setAttribute(
+        "aria-label",
+        "Delete"
+    );
+
+
+    deleteBtn.title =
+        "Delete";
 
 
     deleteBtn.addEventListener(
         "click",
-        () => {
+        event => {
+
+            event.stopPropagation();
 
             deleteUserMaterial(
                 material
@@ -609,17 +835,23 @@ function createMaterialMenu(material) {
     );
 
 
-    menu.appendChild(select);
-    menu.appendChild(deleteBtn);
+    menu.appendChild(
+        select
+    );
+
+
+    menu.appendChild(
+        deleteBtn
+    );
 
 
     return menu;
+
 }
 
 
-
 /* =========================================================
-   MOVE MATERIAL CATEGORY
+   MOVE USER MATERIAL
 ========================================================= */
 
 async function moveMaterialToCategory(
@@ -635,7 +867,10 @@ async function moveMaterialToCategory(
             await supabaseClient
                 .from("materials")
                 .update({
-                    category: category
+
+                    category:
+                        category
+
                 })
                 .eq(
                     "id",
@@ -650,7 +885,12 @@ async function moveMaterialToCategory(
                 error
             );
 
+            alert(
+                "Could not change material category."
+            );
+
             return;
+
         }
 
 
@@ -662,9 +902,10 @@ async function moveMaterialToCategory(
             "Category update error:",
             error
         );
-    }
-}
 
+    }
+
+}
 
 
 /* =========================================================
@@ -682,18 +923,17 @@ async function deleteUserMaterial(
 
 
     if (!confirmed) {
+
         return;
+
     }
 
 
     try {
 
-        /*
-         * Delete database record first.
-         */
-
         const {
-            error: dbError
+            error:
+                dbError
         } =
             await supabaseClient
                 .from("materials")
@@ -711,18 +951,22 @@ async function deleteUserMaterial(
                 dbError
             );
 
+            alert(
+                "Could not delete this material."
+            );
+
             return;
+
         }
 
 
-        /*
-         * Delete storage file if path exists.
-         */
-
-        if (material.storage_path) {
+        if (
+            material.storage_path
+        ) {
 
             const {
-                error: storageError
+                error:
+                    storageError
             } =
                 await supabaseClient
                     .storage
@@ -738,7 +982,9 @@ async function deleteUserMaterial(
                     "Storage delete failed:",
                     storageError
                 );
+
             }
+
         }
 
 
@@ -750,9 +996,10 @@ async function deleteUserMaterial(
             "Delete material error:",
             error
         );
-    }
-}
 
+    }
+
+}
 
 
 /* =========================================================
@@ -761,78 +1008,109 @@ async function deleteUserMaterial(
 
 function bindUploadButtons() {
 
-    takePhotoBtn.addEventListener(
-        "click",
-        () => {
+    if (
+        takePhotoBtn &&
+        cameraInput
+    ) {
 
-            cameraInput.click();
+        takePhotoBtn.addEventListener(
+            "click",
+            () => {
 
-        }
-    );
+                cameraInput.click();
 
+            }
+        );
 
-    fromAlbumBtn.addEventListener(
-        "click",
-        () => {
-
-            albumInput.click();
-
-        }
-    );
+    }
 
 
-    cameraInput.addEventListener(
-        "change",
-        event => {
+    if (
+        fromAlbumBtn &&
+        albumInput
+    ) {
 
-            handleUpload(
-                event.target.files
-            );
+        fromAlbumBtn.addEventListener(
+            "click",
+            () => {
 
-            event.target.value =
-                "";
+                albumInput.click();
 
-        }
-    );
+            }
+        );
+
+    }
 
 
-    albumInput.addEventListener(
-        "change",
-        event => {
+    if (cameraInput) {
 
-            handleUpload(
-                event.target.files
-            );
+        cameraInput.addEventListener(
+            "change",
+            event => {
 
-            event.target.value =
-                "";
+                handleUpload(
+                    event.target.files
+                );
 
-        }
-    );
+                event.target.value =
+                    "";
+
+            }
+        );
+
+    }
+
+
+    if (albumInput) {
+
+        albumInput.addEventListener(
+            "change",
+            event => {
+
+                handleUpload(
+                    event.target.files
+                );
+
+                event.target.value =
+                    "";
+
+            }
+        );
+
+    }
+
 }
-
 
 
 /* =========================================================
    FILE EXTENSION
 ========================================================= */
 
-function getFileExtension(file) {
+function getFileExtension(
+    file
+) {
 
     const parts =
-        file.name.split(".");
+        file.name.split(
+            "."
+        );
 
 
-    if (parts.length < 2) {
+    if (
+        parts.length <
+        2
+    ) {
+
         return "jpg";
+
     }
 
 
     return parts
         .pop()
         .toLowerCase();
-}
 
+}
 
 
 /* =========================================================
@@ -847,12 +1125,29 @@ async function handleUpload(
         !files ||
         !files.length
     ) {
+
         return;
+
     }
 
 
     const file =
         files[0];
+
+
+    if (
+        !file.type.startsWith(
+            "image/"
+        )
+    ) {
+
+        alert(
+            "Please upload an image."
+        );
+
+        return;
+
+    }
 
 
     const category =
@@ -872,6 +1167,7 @@ async function handleUpload(
             );
 
             return;
+
         }
 
 
@@ -880,7 +1176,9 @@ async function handleUpload(
 
 
         const extension =
-            getFileExtension(file);
+            getFileExtension(
+                file
+            );
 
 
         const fileName =
@@ -893,12 +1191,9 @@ async function handleUpload(
             `${userId}/${fileName}`;
 
 
-        /*
-         * Upload image
-         */
-
         const {
-            error: uploadError
+            error:
+                uploadError
         } =
             await supabaseClient
                 .storage
@@ -907,7 +1202,9 @@ async function handleUpload(
                     storagePath,
                     file,
                     {
-                        upsert: false,
+                        upsert:
+                            false,
+
                         contentType:
                             file.type
                     }
@@ -926,15 +1223,13 @@ async function handleUpload(
             );
 
             return;
+
         }
 
 
-        /*
-         * Public URL
-         */
-
         const {
-            data: publicUrlData
+            data:
+                publicUrlData
         } =
             supabaseClient
                 .storage
@@ -948,12 +1243,9 @@ async function handleUpload(
             publicUrlData.publicUrl;
 
 
-        /*
-         * Insert database record
-         */
-
         const {
-            error: insertError
+            error:
+                insertError
         } =
             await supabaseClient
                 .from("materials")
@@ -984,10 +1276,6 @@ async function handleUpload(
                 insertError
             );
 
-            /*
-             * If database insertion fails,
-             * remove the uploaded file.
-             */
 
             await supabaseClient
                 .storage
@@ -996,11 +1284,13 @@ async function handleUpload(
                     storagePath
                 ]);
 
+
             alert(
                 "Database insert failed. Please check Supabase permissions."
             );
 
             return;
+
         }
 
 
@@ -1016,25 +1306,91 @@ async function handleUpload(
         alert(
             "Upload failed."
         );
+
     }
+
 }
 
 
-
 /* =========================================================
-   CANVAS STATE
+   CANVAS HELPERS
 ========================================================= */
 
-let selectedCanvasItem =
-    null;
+function getCanvasItems() {
+
+    if (!canvas) {
+
+        return [];
+
+    }
 
 
-/*
- * Start with a reasonably high z-index.
- * New elements will always appear on top.
- */
-let highestZIndex = 1;
+    return Array.from(
+        canvas.querySelectorAll(
+            ".canvas-item"
+        )
+    );
 
+}
+
+
+function getNextZIndex() {
+
+    highestZIndex +=
+        1;
+
+    return highestZIndex;
+
+}
+
+
+/* =========================================================
+   CREATE CANVAS CONTROL
+========================================================= */
+
+function createCanvasControl(
+    className,
+    text,
+    title
+) {
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+
+    button.type =
+        "button";
+
+
+    button.className =
+        `canvas-control ${className}`;
+
+
+    button.textContent =
+        text;
+
+
+    button.title =
+        title;
+
+
+    button.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+        }
+    );
+
+
+    return button;
+
+}
 
 
 /* =========================================================
@@ -1043,24 +1399,28 @@ let highestZIndex = 1;
 
 function addImageToCanvas(
     imageSrc,
-    imageAlt = "Material"
+    imageAlt = "Material",
+    options = {}
 ) {
 
+    if (
+        !canvas ||
+        !imageSrc
+    ) {
+
+        return null;
+
+    }
+
+
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     item.className =
         "canvas-item";
-
-
-    /*
-     * Give every new item a higher z-index.
-     */
-
-    highestZIndex += 1;
-
-    item.style.zIndex =
-        highestZIndex;
 
 
     item.dataset.rotation =
@@ -1071,37 +1431,68 @@ function addImageToCanvas(
         "1";
 
 
-    const image =
-        document.createElement("img");
+    item.dataset.category =
+        options.category ||
+        "objects";
 
-    image.crossOrigin = "anonymous";
+
+    item.style.width =
+        `${
+            options.width ||
+            180
+        }px`;
+
+
+    item.style.zIndex =
+        getNextZIndex();
+
+
+    const image =
+        document.createElement(
+            "img"
+        );
+
+
     image.src =
         imageSrc;
 
+
     image.alt =
         imageAlt;
+
+
+    image.crossOrigin =
+        "anonymous";
+
 
     image.draggable =
         false;
 
 
-    /*
-     * Controls
-     */
+    image.addEventListener(
+        "dragstart",
+        event => {
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    item.appendChild(
+        image
+    );
+
+
+    /* ---------------------------------------------
+       Controls
+    --------------------------------------------- */
 
     const deleteBtn =
         createCanvasControl(
             "canvas-delete",
             "×",
             "Delete"
-        );
-
-
-    const frontBtn =
-        createCanvasControl(
-            "canvas-front",
-            "↑↑",
-            "Bring to front"
         );
 
 
@@ -1121,14 +1512,6 @@ function addImageToCanvas(
         );
 
 
-    const backBtn =
-        createCanvasControl(
-            "canvas-back",
-            "↓↓",
-            "Send to back"
-        );
-
-
     const rotateBtn =
         createCanvasControl(
             "canvas-rotate",
@@ -1140,156 +1523,103 @@ function addImageToCanvas(
     const resizeBtn =
         createCanvasControl(
             "canvas-resize",
-            "↘",
+            "↗",
             "Resize"
         );
 
-
-    item.appendChild(image);
 
     item.appendChild(
         deleteBtn
     );
 
-    item.appendChild(
-        frontBtn
-    );
 
     item.appendChild(
         forwardBtn
     );
 
+
     item.appendChild(
         backwardBtn
     );
 
-    item.appendChild(
-        backBtn
-    );
 
     item.appendChild(
         rotateBtn
     );
+
 
     item.appendChild(
         resizeBtn
     );
 
 
-    canvas.appendChild(item);
+    canvas.appendChild(
+        item
+    );
 
 
-    /*
-     * Place the element near the center
-     * of the canvas.
-     */
+    /* ---------------------------------------------
+       Position
+    --------------------------------------------- */
 
     const canvasRect =
         canvas.getBoundingClientRect();
 
 
-    const initialLeft =
-        Math.max(
-            20,
-            canvasRect.width / 2 - 80
-        );
-
-
-    const initialTop =
-        Math.max(
-            20,
-            canvasRect.height / 2 - 80
-        );
+    const width =
+        options.width ||
+        180;
 
 
     item.style.left =
-        `${initialLeft}px`;
+        `${
+            Math.max(
+                20,
+                (
+                    canvasRect.width -
+                    width
+                ) / 2
+            )
+        }px`;
+
 
     item.style.top =
-        `${initialTop}px`;
+        `${
+            Math.max(
+                20,
+                (
+                    canvasRect.height -
+                    180
+                ) / 2
+            )
+        }px`;
 
-
-    /*
-     * Bind controls
-     */
 
     bindCanvasControls(
         item,
         {
             deleteBtn,
-            frontBtn,
             forwardBtn,
             backwardBtn,
-            backBtn,
             rotateBtn,
             resizeBtn
         }
     );
 
 
-    /*
-     * Dragging
-     */
-
     enableCanvasDragging(
         item
     );
 
 
-    /*
-     * Select when created
-     */
-
     selectCanvasItem(
         item
     );
+
+
+    return item;
+
 }
-
-
-
-/* =========================================================
-   CREATE CANVAS CONTROL
-========================================================= */
-
-function createCanvasControl(
-    className,
-    text,
-    title
-) {
-
-    const button =
-        document.createElement("button");
-
-    button.type =
-        "button";
-
-    button.className =
-        `canvas-control ${className}`;
-
-    button.textContent =
-        text;
-
-    button.title =
-        title;
-
-    /*
-     * Prevent button pointer events
-     * from being interpreted as dragging.
-     */
-
-    button.addEventListener(
-        "pointerdown",
-        event => {
-
-            event.stopPropagation();
-
-        }
-    );
-
-
-    return button;
-}
-
 
 
 /* =========================================================
@@ -1300,10 +1630,6 @@ function bindCanvasControls(
     item,
     controls
 ) {
-
-    /*
-     * Delete
-     */
 
     controls.deleteBtn.addEventListener(
         "click",
@@ -1319,10 +1645,6 @@ function bindCanvasControls(
     );
 
 
-    /*
-     * Bring forward one level
-     */
-
     controls.forwardBtn.addEventListener(
         "click",
         event => {
@@ -1336,10 +1658,6 @@ function bindCanvasControls(
         }
     );
 
-
-    /*
-     * Send backward one level
-     */
 
     controls.backwardBtn.addEventListener(
         "click",
@@ -1355,51 +1673,12 @@ function bindCanvasControls(
     );
 
 
-    /*
-     * Bring to front
-     */
-
-    controls.frontBtn.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-            bringToFront(
-                item
-            );
-
-        }
-    );
-
-
-    /*
-     * Send to back
-     */
-
-    controls.backBtn.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-            sendToBack(
-                item
-            );
-
-        }
-    );
-
-
-    /*
-     * Rotation
-     */
-
     controls.rotateBtn.addEventListener(
         "pointerdown",
         event => {
 
             event.preventDefault();
+
             event.stopPropagation();
 
             startRotation(
@@ -1411,15 +1690,12 @@ function bindCanvasControls(
     );
 
 
-    /*
-     * Resize
-     */
-
     controls.resizeBtn.addEventListener(
         "pointerdown",
         event => {
 
             event.preventDefault();
+
             event.stopPropagation();
 
             startResize(
@@ -1429,17 +1705,24 @@ function bindCanvasControls(
 
         }
     );
+
 }
 
 
-
 /* =========================================================
-   SELECT CANVAS ITEM
+   SELECT
 ========================================================= */
 
 function selectCanvasItem(
     item
 ) {
+
+    if (!item) {
+
+        return;
+
+    }
+
 
     document
         .querySelectorAll(
@@ -1463,12 +1746,29 @@ function selectCanvasItem(
 
     selectedCanvasItem =
         item;
+
+
+    if (
+        item.classList.contains(
+            "dialogue-item"
+        )
+    ) {
+
+        showDialogueStylePanel(
+            item
+        );
+
+    } else {
+
+        hideDialogueStylePanel();
+
+    }
+
 }
 
 
-
 /* =========================================================
-   DESELECT ALL
+   DESELECT
 ========================================================= */
 
 function deselectAllCanvasItems() {
@@ -1490,12 +1790,15 @@ function deselectAllCanvasItems() {
 
     selectedCanvasItem =
         null;
+
+
+    hideDialogueStylePanel();
+
 }
 
 
-
 /* =========================================================
-   REMOVE CANVAS ITEM
+   REMOVE
 ========================================================= */
 
 function removeCanvasItem(
@@ -1503,7 +1806,9 @@ function removeCanvasItem(
 ) {
 
     if (!item) {
+
         return;
+
     }
 
 
@@ -1514,80 +1819,44 @@ function removeCanvasItem(
 
         selectedCanvasItem =
             null;
+
     }
 
 
     item.remove();
-}
 
+
+    hideDialogueStylePanel();
+
+}
 
 
 /* =========================================================
    LAYER ORDER
 ========================================================= */
 
-/*
- * Get all Canvas items sorted by z-index.
- */
-
 function getCanvasItemsSorted() {
 
-    return Array
-        .from(
-            canvas.querySelectorAll(
-                ".canvas-item"
-            )
-        )
+    return getCanvasItems()
         .sort(
             (a, b) => {
 
                 return (
                     parseInt(
-                        a.style.zIndex || "0"
+                        a.style.zIndex ||
+                        "0"
                     ) -
                     parseInt(
-                        b.style.zIndex || "0"
+                        b.style.zIndex ||
+                        "0"
                     )
                 );
 
             }
         );
+
 }
 
-
-
-/*
- * Normalize all z-index values.
- *
- * This prevents z-index numbers from becoming
- * unnecessarily large after many operations.
- */
-
-function normalizeZIndexes() {
-
-    const items =
-        getCanvasItemsSorted();
-
-
-    items.forEach(
-        (item, index) => {
-
-            item.style.zIndex =
-                index + 1;
-
-        }
-    );
-
-
-    highestZIndex =
-        items.length + 1;
-}
-
-
-
-/*
- * Bring one item forward by one layer.
- */
 
 function bringForward(
     item
@@ -1597,57 +1866,52 @@ function bringForward(
         getCanvasItemsSorted();
 
 
-    const currentIndex =
-        items.indexOf(item);
+    const index =
+        items.indexOf(
+            item
+        );
 
-
-    if (currentIndex === -1) {
-        return;
-    }
-
-
-    /*
-     * Already at top.
-     */
 
     if (
-        currentIndex ===
+        index < 0 ||
+        index >=
         items.length - 1
     ) {
+
         return;
+
     }
 
 
     const nextItem =
         items[
-            currentIndex + 1
+            index + 1
         ];
 
 
     const currentZ =
         parseInt(
-            item.style.zIndex || "0"
+            item.style.zIndex ||
+            "0"
         );
 
 
     const nextZ =
         parseInt(
-            nextItem.style.zIndex || "0"
+            nextItem.style.zIndex ||
+            "0"
         );
 
 
     item.style.zIndex =
         nextZ;
 
+
     nextItem.style.zIndex =
         currentZ;
+
 }
 
-
-
-/*
- * Send one item backward by one layer.
- */
 
 function sendBackward(
     item
@@ -1657,170 +1921,106 @@ function sendBackward(
         getCanvasItemsSorted();
 
 
-    const currentIndex =
-        items.indexOf(item);
+    const index =
+        items.indexOf(
+            item
+        );
 
-
-    if (currentIndex === -1) {
-        return;
-    }
-
-
-    /*
-     * Already at bottom.
-     */
 
     if (
-        currentIndex === 0
+        index <= 0
     ) {
+
         return;
+
     }
 
 
     const previousItem =
         items[
-            currentIndex - 1
+            index - 1
         ];
 
 
     const currentZ =
         parseInt(
-            item.style.zIndex || "0"
+            item.style.zIndex ||
+            "0"
         );
 
 
     const previousZ =
         parseInt(
-            previousItem.style.zIndex || "0"
+            previousItem.style.zIndex ||
+            "0"
         );
 
 
     item.style.zIndex =
         previousZ;
 
+
     previousItem.style.zIndex =
         currentZ;
+
 }
-
-
-
-/*
- * Bring item to absolute top.
- */
-
-function bringToFront(
-    item
-) {
-
-    const items =
-        getCanvasItemsSorted();
-
-
-    if (
-        items.length === 0
-    ) {
-        return;
-    }
-
-
-    const maxZ =
-        Math.max(
-            ...items.map(
-                currentItem =>
-                    parseInt(
-                        currentItem.style.zIndex || "0"
-                    )
-            )
-        );
-
-
-    item.style.zIndex =
-        maxZ + 1;
-
-
-    normalizeZIndexes();
-}
-
-
-
-/*
- * Send item to absolute bottom.
- */
-
-function sendToBack(
-    item
-) {
-
-    const items =
-        getCanvasItemsSorted();
-
-
-    if (
-        items.length === 0
-    ) {
-        return;
-    }
-
-
-    const minZ =
-        Math.min(
-            ...items.map(
-                currentItem =>
-                    parseInt(
-                        currentItem.style.zIndex || "0"
-                    )
-            )
-        );
-
-
-    item.style.zIndex =
-        minZ - 1;
-
-
-    normalizeZIndexes();
-}
-
 
 
 /* =========================================================
    DRAGGING
+   IMPORTANT:
+   - Image: normal drag
+   - Dialogue:
+       click = edit
+       drag > 5px = move
 ========================================================= */
 
 function enableCanvasDragging(
     item
 ) {
 
+    let startX =
+        0;
+
+    let startY =
+        0;
+
+    let startLeft =
+        0;
+
+    let startTop =
+        0;
+
+    let pointerId =
+        null;
+
+    let dragging =
+        false;
+
+
     item.addEventListener(
         "pointerdown",
         event => {
-
-            /*
-             * Only primary pointer.
-             */
 
             if (
                 event.button !== 0 &&
                 event.pointerType !== "touch"
             ) {
+
                 return;
+
             }
 
-
-            /*
-             * Do not start dragging
-             * from control buttons.
-             */
 
             if (
                 event.target.closest(
                     ".canvas-control"
                 )
             ) {
+
                 return;
+
             }
-
-
-            event.preventDefault();
 
 
             selectCanvasItem(
@@ -1828,59 +2028,107 @@ function enableCanvasDragging(
             );
 
 
-            /*
-             * Bring selected item visually
-             * above its controls only.
-             *
-             * We do NOT automatically change
-             * the user's layer order here.
-             */
+            startX =
+                event.clientX;
+
+            startY =
+                event.clientY;
 
 
-            const canvasRect =
-                canvas.getBoundingClientRect();
+            startLeft =
+                parseFloat(
+                    item.style.left ||
+                    "0"
+                );
 
 
-            const itemRect =
-                item.getBoundingClientRect();
+            startTop =
+                parseFloat(
+                    item.style.top ||
+                    "0"
+                );
 
 
-            const offsetX =
-                event.clientX -
-                itemRect.left;
+            pointerId =
+                event.pointerId;
 
 
-            const offsetY =
-                event.clientY -
-                itemRect.top;
+            dragging =
+                false;
 
 
-            item.setPointerCapture(
-                event.pointerId
-            );
+            try {
+
+                item.setPointerCapture(
+                    pointerId
+                );
+
+            } catch (error) {
+
+                /* Ignore */
+
+            }
 
 
             function move(
                 moveEvent
             ) {
 
-                const x =
+                if (
+                    moveEvent.pointerId !==
+                    pointerId
+                ) {
+
+                    return;
+
+                }
+
+
+                const dx =
                     moveEvent.clientX -
-                    canvasRect.left -
-                    offsetX;
+                    startX;
 
 
-                const y =
+                const dy =
                     moveEvent.clientY -
-                    canvasRect.top -
-                    offsetY;
+                    startY;
+
+
+                if (!dragging) {
+
+                    const distance =
+                        Math.hypot(
+                            dx,
+                            dy
+                        );
+
+
+                    if (
+                        distance <
+                        5
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    dragging =
+                        true;
+
+                }
+
+
+                moveEvent.preventDefault();
 
 
                 item.style.left =
-                    `${x}px`;
+                    `${startLeft + dx}px`;
+
 
                 item.style.top =
-                    `${y}px`;
+                    `${startTop + dy}px`;
+
             }
 
 
@@ -1888,14 +2136,26 @@ function enableCanvasDragging(
                 endEvent
             ) {
 
+                if (
+                    endEvent.pointerId !==
+                    pointerId
+                ) {
+
+                    return;
+
+                }
+
+
                 try {
 
                     item.releasePointerCapture(
-                        endEvent.pointerId
+                        pointerId
                     );
 
                 } catch (error) {
+
                     /* Ignore */
+
                 }
 
 
@@ -1904,15 +2164,26 @@ function enableCanvasDragging(
                     move
                 );
 
+
                 item.removeEventListener(
                     "pointerup",
                     end
                 );
 
+
                 item.removeEventListener(
                     "pointercancel",
                     end
                 );
+
+
+                pointerId =
+                    null;
+
+
+                dragging =
+                    false;
+
             }
 
 
@@ -1921,10 +2192,12 @@ function enableCanvasDragging(
                 move
             );
 
+
             item.addEventListener(
                 "pointerup",
                 end
             );
+
 
             item.addEventListener(
                 "pointercancel",
@@ -1933,9 +2206,8 @@ function enableCanvasDragging(
 
         }
     );
-}
-           
 
+}
 
 
 /* =========================================================
@@ -1968,20 +2240,32 @@ function startRotation(
 
     const startAngle =
         Math.atan2(
-            event.clientY - centerY,
-            event.clientX - centerX
+            event.clientY -
+                centerY,
+
+            event.clientX -
+                centerX
         );
 
 
     const currentRotation =
         parseFloat(
-            item.dataset.rotation || "0"
+            item.dataset.rotation ||
+            "0"
         );
 
 
-    item.setPointerCapture(
-        event.pointerId
-    );
+    try {
+
+        item.setPointerCapture(
+            event.pointerId
+        );
+
+    } catch (error) {
+
+        /* Ignore */
+
+    }
 
 
     function move(
@@ -1990,8 +2274,11 @@ function startRotation(
 
         const currentAngle =
             Math.atan2(
-                moveEvent.clientY - centerY,
-                moveEvent.clientX - centerX
+                moveEvent.clientY -
+                    centerY,
+
+                moveEvent.clientX -
+                    centerX
             );
 
 
@@ -2000,21 +2287,21 @@ function startRotation(
                 currentAngle -
                 startAngle
             ) *
-            (180 / Math.PI);
-
-
-        const rotation =
-            currentRotation +
-            delta;
+            (
+                180 /
+                Math.PI
+            );
 
 
         item.dataset.rotation =
-            rotation;
+            currentRotation +
+            delta;
 
 
         updateCanvasTransform(
             item
         );
+
     }
 
 
@@ -2029,7 +2316,9 @@ function startRotation(
             );
 
         } catch (error) {
+
             /* Ignore */
+
         }
 
 
@@ -2038,15 +2327,18 @@ function startRotation(
             move
         );
 
+
         item.removeEventListener(
             "pointerup",
             end
         );
 
+
         item.removeEventListener(
             "pointercancel",
             end
         );
+
     }
 
 
@@ -2055,17 +2347,19 @@ function startRotation(
         move
     );
 
+
     item.addEventListener(
         "pointerup",
         end
     );
 
+
     item.addEventListener(
         "pointercancel",
         end
     );
-}
 
+}
 
 
 /* =========================================================
@@ -2111,14 +2405,31 @@ function startResize(
             .width;
 
 
-    item.setPointerCapture(
-        event.pointerId
-    );
+    try {
+
+        item.setPointerCapture(
+            event.pointerId
+        );
+
+    } catch (error) {
+
+        /* Ignore */
+
+    }
 
 
     function move(
         moveEvent
     ) {
+
+        if (
+            startDistance <= 0
+        ) {
+
+            return;
+
+        }
+
 
         const currentDistance =
             Math.hypot(
@@ -2130,13 +2441,6 @@ function startResize(
             );
 
 
-        if (
-            startDistance <= 0
-        ) {
-            return;
-        }
-
-
         let newWidth =
             startWidth *
             (
@@ -2144,10 +2448,6 @@ function startResize(
                 startDistance
             );
 
-
-        /*
-         * Minimum and maximum size
-         */
 
         newWidth =
             Math.max(
@@ -2161,6 +2461,7 @@ function startResize(
 
         item.style.width =
             `${newWidth}px`;
+
     }
 
 
@@ -2175,7 +2476,9 @@ function startResize(
             );
 
         } catch (error) {
+
             /* Ignore */
+
         }
 
 
@@ -2184,15 +2487,18 @@ function startResize(
             move
         );
 
+
         item.removeEventListener(
             "pointerup",
             end
         );
 
+
         item.removeEventListener(
             "pointercancel",
             end
         );
+
     }
 
 
@@ -2201,21 +2507,23 @@ function startResize(
         move
     );
 
+
     item.addEventListener(
         "pointerup",
         end
     );
 
+
     item.addEventListener(
         "pointercancel",
         end
     );
+
 }
 
 
-
 /* =========================================================
-   UPDATE TRANSFORM
+   TRANSFORM
 ========================================================= */
 
 function updateCanvasTransform(
@@ -2224,41 +2532,597 @@ function updateCanvasTransform(
 
     const rotation =
         parseFloat(
-            item.dataset.rotation || "0"
+            item.dataset.rotation ||
+            "0"
         );
 
 
     const scale =
         parseFloat(
-            item.dataset.scale || "1"
+            item.dataset.scale ||
+            "1"
         );
 
 
     item.style.transform =
         `rotate(${rotation}deg) scale(${scale})`;
+
 }
 
 
-
 /* =========================================================
-   CANVAS BACKGROUND CLICK
+   DIALOGUE
 ========================================================= */
 
-canvas.addEventListener(
-    "pointerdown",
-    event => {
+function addDialogue() {
 
-        if (
-            event.target === canvas
-        ) {
+    if (!canvas) {
 
-            deselectAllCanvasItems();
-
-        }
+        return;
 
     }
-);
 
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+
+    item.className =
+        "canvas-item dialogue-item";
+
+
+    item.dataset.rotation =
+        "0";
+
+
+    item.dataset.scale =
+        "1";
+
+
+    item.style.width =
+        "230px";
+
+
+    item.style.zIndex =
+        getNextZIndex();
+
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+
+    box.className =
+        "dialogue-box";
+
+
+    box.contentEditable =
+        "true";
+
+
+    box.spellcheck =
+        false;
+
+
+    box.textContent =
+        "TYPE YOUR COUNTY STORY";
+
+
+    box.style.color =
+        dialogueTextColor?.value ||
+        "#111111";
+
+
+    box.style.borderColor =
+        dialogueBorderColor?.value ||
+        "#111111";
+
+
+    item.appendChild(
+        box
+    );
+
+
+    /* ---------------------------------------------
+       Controls
+    --------------------------------------------- */
+
+    const deleteBtn =
+        createCanvasControl(
+            "canvas-delete",
+            "×",
+            "Delete"
+        );
+
+
+    const forwardBtn =
+        createCanvasControl(
+            "canvas-forward",
+            "↑",
+            "Bring forward"
+        );
+
+
+    const backwardBtn =
+        createCanvasControl(
+            "canvas-backward",
+            "↓",
+            "Send backward"
+        );
+
+
+    const rotateBtn =
+        createCanvasControl(
+            "canvas-rotate",
+            "↻",
+            "Rotate"
+        );
+
+
+    const resizeBtn =
+        createCanvasControl(
+            "canvas-resize",
+            "↗",
+            "Resize"
+        );
+
+
+    item.appendChild(
+        deleteBtn
+    );
+
+
+    item.appendChild(
+        forwardBtn
+    );
+
+
+    item.appendChild(
+        backwardBtn
+    );
+
+
+    item.appendChild(
+        rotateBtn
+    );
+
+
+    item.appendChild(
+        resizeBtn
+    );
+
+
+    canvas.appendChild(
+        item
+    );
+
+
+    /* ---------------------------------------------
+       Position
+    --------------------------------------------- */
+
+    const canvasRect =
+        canvas.getBoundingClientRect();
+
+
+    item.style.left =
+        `${Math.max(
+            20,
+            canvasRect.width / 2 -
+            115
+        )}px`;
+
+
+    item.style.top =
+        `${Math.max(
+            20,
+            canvasRect.height / 2 -
+            50
+        )}px`;
+
+
+    bindCanvasControls(
+        item,
+        {
+            deleteBtn,
+            forwardBtn,
+            backwardBtn,
+            rotateBtn,
+            resizeBtn
+        }
+    );
+
+
+    enableCanvasDragging(
+        item
+    );
+
+
+    /*
+     * IMPORTANT:
+     *
+     * Do NOT stopPropagation here.
+     *
+     * The parent .canvas-item needs to receive
+     * pointerdown so dragging can work.
+     *
+     * The drag system waits for 5px movement.
+     *
+     * Therefore:
+     *
+     * click = text editing
+     * drag = move dialogue
+     */
+
+    box.addEventListener(
+        "pointerdown",
+        () => {
+
+            selectCanvasItem(
+                item
+            );
+
+        }
+    );
+
+
+    box.addEventListener(
+        "focus",
+        () => {
+
+            selectCanvasItem(
+                item
+            );
+
+        }
+    );
+
+
+    box.addEventListener(
+        "dragstart",
+        event => {
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    selectCanvasItem(
+        item
+    );
+
+
+    setTimeout(
+        () => {
+
+            box.focus();
+
+
+            try {
+
+                const selection =
+                    window.getSelection();
+
+
+                const range =
+                    document.createRange();
+
+
+                range.selectNodeContents(
+                    box
+                );
+
+
+                selection.removeAllRanges();
+
+
+                selection.addRange(
+                    range
+                );
+
+            } catch (error) {
+
+                /* Ignore */
+
+            }
+
+        },
+        50
+    );
+
+
+    return item;
+
+}
+
+
+/* =========================================================
+   DIALOGUE STYLE PANEL
+========================================================= */
+
+function showDialogueStylePanel(
+    item
+) {
+
+    if (!dialogueStylePanel) {
+
+        return;
+
+    }
+
+
+    dialogueStylePanel.classList.add(
+        "visible"
+    );
+
+
+    dialogueStylePanel.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    const box =
+        item.querySelector(
+            ".dialogue-box"
+        );
+
+
+    if (!box) {
+
+        return;
+
+    }
+
+
+    const computed =
+        window.getComputedStyle(
+            box
+        );
+
+
+    if (
+        dialogueTextColor
+    ) {
+
+        dialogueTextColor.value =
+            rgbToHex(
+                computed.color
+            );
+
+    }
+
+
+    if (
+        dialogueBorderColor
+    ) {
+
+        dialogueBorderColor.value =
+            rgbToHex(
+                computed.borderTopColor
+            );
+
+    }
+
+}
+
+
+function hideDialogueStylePanel() {
+
+    if (!dialogueStylePanel) {
+
+        return;
+
+    }
+
+
+    dialogueStylePanel.classList.remove(
+        "visible"
+    );
+
+
+    dialogueStylePanel.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+
+function rgbToHex(
+    color
+) {
+
+    if (!color) {
+
+        return "#111111";
+
+    }
+
+
+    if (
+        color.startsWith(
+            "#"
+        )
+    ) {
+
+        return color;
+
+    }
+
+
+    const values =
+        color.match(
+            /\d+/g
+        );
+
+
+    if (
+        !values ||
+        values.length <
+        3
+    ) {
+
+        return "#111111";
+
+    }
+
+
+    return (
+        "#" +
+        values
+            .slice(0, 3)
+            .map(
+                value =>
+                    parseInt(
+                        value,
+                        10
+                    )
+                        .toString(16)
+                        .padStart(
+                            2,
+                            "0"
+                        )
+            )
+            .join("")
+    );
+
+}
+
+
+/* =========================================================
+   DIALOGUE TEXT COLOR
+========================================================= */
+
+if (
+    dialogueTextColor
+) {
+
+    dialogueTextColor.addEventListener(
+        "input",
+        event => {
+
+            if (
+                !selectedCanvasItem ||
+                !selectedCanvasItem.classList.contains(
+                    "dialogue-item"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const box =
+                selectedCanvasItem.querySelector(
+                    ".dialogue-box"
+                );
+
+
+            if (box) {
+
+                box.style.color =
+                    event.target.value;
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DIALOGUE BORDER COLOR
+========================================================= */
+
+if (
+    dialogueBorderColor
+) {
+
+    dialogueBorderColor.addEventListener(
+        "input",
+        event => {
+
+            if (
+                !selectedCanvasItem ||
+                !selectedCanvasItem.classList.contains(
+                    "dialogue-item"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const box =
+                selectedCanvasItem.querySelector(
+                    ".dialogue-box"
+                );
+
+
+            if (box) {
+
+                box.style.borderColor =
+                    event.target.value;
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ADD DIALOGUE BUTTON
+========================================================= */
+
+if (
+    addDialogueBtn
+) {
+
+    addDialogueBtn.addEventListener(
+        "click",
+        () => {
+
+            addDialogue();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CANVAS BACKGROUND
+========================================================= */
+
+if (canvas) {
+
+    canvas.addEventListener(
+        "pointerdown",
+        event => {
+
+            if (
+                event.target ===
+                canvas
+            ) {
+
+                deselectAllCanvasItems();
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
@@ -2270,164 +3134,152 @@ document.addEventListener(
     event => {
 
         if (
-            event.key === "Delete" ||
-            event.key === "Backspace"
+            event.key !==
+            "Delete" &&
+            event.key !==
+            "Backspace"
         ) {
 
-            /*
-             * Do not delete Canvas item when
-             * user is typing/selecting text in
-             * an input or select.
-             */
+            return;
 
-            const activeElement =
-                document.activeElement;
+        }
 
 
-            if (
-                activeElement &&
-                (
-                    activeElement.tagName ===
-                    "INPUT" ||
-
-                    activeElement.tagName ===
-                    "TEXTAREA" ||
-
-                    activeElement.tagName ===
-                    "SELECT"
-                )
-            ) {
-                return;
-            }
+        const activeElement =
+            document.activeElement;
 
 
-            if (
+        if (
+            activeElement &&
+            (
+                activeElement.tagName ===
+                "INPUT" ||
+
+                activeElement.tagName ===
+                "TEXTAREA" ||
+
+                activeElement.tagName ===
+                "SELECT"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            activeElement &&
+            activeElement.isContentEditable
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            selectedCanvasItem
+        ) {
+
+            event.preventDefault();
+
+            removeCanvasItem(
                 selectedCanvasItem
-            ) {
+            );
 
-                removeCanvasItem(
-                    selectedCanvasItem
-                );
-
-            }
         }
 
     }
 );
 
 
-
 /* =========================================================
    MAKE ANOTHER COUNTY
-   Automatically recombine materials from the shared library.
-   This does NOT delete or modify Supabase materials.
 ========================================================= */
 
 const AUTO_COUNTY_SETTINGS = {
-    minimumItems: 6,
-    maximumItems: 9,
 
-    peopleMinimum: 1,
-    peopleMaximum: 2,
+    minimumItems:
+        6,
 
-    objectsMinimum: 2,
-    objectsMaximum: 3,
+    maximumItems:
+        9,
 
-    buildingsMinimum: 2,
-    buildingsMaximum: 3,
+    peopleMinimum:
+        1,
 
-    minimumWidth: 90,
-    maximumWidth: 280,
+    peopleMaximum:
+        2,
 
-    minimumRotation: -18,
-    maximumRotation: 18,
+    objectsMinimum:
+        2,
 
-    edgePadding: 24
+    objectsMaximum:
+        3,
+
+    buildingsMinimum:
+        2,
+
+    buildingsMaximum:
+        3,
+
+    minimumWidth:
+        90,
+
+    maximumWidth:
+        280,
+
+    minimumRotation:
+        -18,
+
+    maximumRotation:
+        18,
+
+    edgePadding:
+        24
+
 };
 
 
-/*
- * Get all currently visible material cards.
- *
- * The category is read from the nearest
- * .material-category[data-category] container.
- *
- * This works for both:
- * - the original static materials
- * - materials uploaded through Supabase
- */
-function getAvailableCountyMaterials() {
+/* =========================================================
+   RANDOM HELPERS
+========================================================= */
 
-    const cards =
-        Array.from(
-            document.querySelectorAll(
-                ".material-card"
-            )
-        );
-
-    return cards
-        .map(card => {
-
-            const image =
-                card.querySelector("img");
-
-            if (!image || !image.src) {
-                return null;
-            }
-
-            const categoryContainer =
-                card.closest(
-                    ".material-category"
-                );
-
-            const category =
-                categoryContainer?.dataset.category ||
-                "people";
-
-            return {
-                src: image.src,
-                alt: image.alt || "Material",
-                category: category
-            };
-
-        })
-        .filter(Boolean);
-}
-
-
-/*
- * Random number between min and max.
- */
 function randomBetween(
     min,
     max
 ) {
+
     return (
         Math.random() *
-            (max - min) +
+        (
+            max -
+            min
+        ) +
         min
     );
+
 }
 
 
-/*
- * Random integer between min and max.
- */
 function randomInteger(
     min,
     max
 ) {
+
     return Math.floor(
         Math.random() *
-            (max - min + 1)
+        (
+            max -
+            min +
+            1
+        )
     ) + min;
+
 }
 
 
-/*
- * Shuffle an array without changing the
- * original array.
- */
 function shuffleArray(
     array
 ) {
@@ -2435,35 +3287,42 @@ function shuffleArray(
     const result =
         [...array];
 
+
     for (
-        let i = result.length - 1;
+        let i =
+            result.length - 1;
+
         i > 0;
+
         i--
     ) {
 
         const j =
             Math.floor(
                 Math.random() *
-                    (i + 1)
+                (
+                    i + 1
+                )
             );
 
 
         [
             result[i],
             result[j]
-        ] = [
+        ] =
+        [
             result[j],
             result[i]
         ];
+
     }
 
+
     return result;
+
 }
 
 
-/*
- * Randomly choose up to `count` unique materials.
- */
 function chooseMaterials(
     materials,
     count
@@ -2478,26 +3337,75 @@ function chooseMaterials(
             materials.length
         )
     );
+
 }
 
 
-/*
- * Make sure the generated county has
- * a reasonable mixture of:
- *
- * BUILDINGS = background / structural layer
- * OBJECTS   = middle layer
- * PEOPLE    = foreground / activity
- */
+/* =========================================================
+   GET AVAILABLE MATERIALS
+========================================================= */
 
-/*
- * Make sure the generated county has
- * a reasonable mixture of:
- *
- * BUILDINGS = background / structural layer
- * OBJECTS   = middle layer
- * PEOPLE    = foreground / activity
- */
+function getAvailableCountyMaterials() {
+
+    return Array
+        .from(
+            document.querySelectorAll(
+                ".material-card"
+            )
+        )
+        .map(
+            card => {
+
+                const image =
+                    card.querySelector(
+                        "img"
+                    );
+
+
+                if (
+                    !image ||
+                    !image.src
+                ) {
+
+                    return null;
+
+                }
+
+
+                const category =
+                    card.closest(
+                        ".material-category"
+                    )?.dataset.category ||
+                    "objects";
+
+
+                return {
+
+                    src:
+                        image.src,
+
+                    alt:
+                        image.alt ||
+                        "Material",
+
+                    category:
+                        category
+
+                };
+
+            }
+        )
+        .filter(
+            Boolean
+        );
+
+}
+
+
+/* =========================================================
+   BUILD AUTOMATIC COUNTY
+========================================================= */
+
 function buildAutomaticCountySelection(
     materials
 ) {
@@ -2509,12 +3417,14 @@ function buildAutomaticCountySelection(
                 "people"
         );
 
+
     const objects =
         materials.filter(
             material =>
                 material.category ===
                 "objects"
         );
+
 
     const buildings =
         materials.filter(
@@ -2523,11 +3433,11 @@ function buildAutomaticCountySelection(
                 "buildings"
         );
 
-    let selected = [];
 
-    /*
-     * First create the structural mix.
-     */
+    let selected =
+        [];
+
+
     selected.push(
         ...chooseMaterials(
             people,
@@ -2537,6 +3447,7 @@ function buildAutomaticCountySelection(
             )
         )
     );
+
 
     selected.push(
         ...chooseMaterials(
@@ -2548,6 +3459,7 @@ function buildAutomaticCountySelection(
         )
     );
 
+
     selected.push(
         ...chooseMaterials(
             buildings,
@@ -2558,69 +3470,49 @@ function buildAutomaticCountySelection(
         )
     );
 
-    /*
-     * If there are not enough materials in one
-     * category, fill the county from all materials.
-     */
+
+    const unique =
+        [];
+
+
+    const seen =
+        new Set();
+
+
+    selected.forEach(
+        material => {
+
+            if (
+                seen.has(
+                    material.src
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            seen.add(
+                material.src
+            );
+
+
+            unique.push(
+                material
+            );
+
+        }
+    );
+
+
+    selected =
+        unique;
+
+
     if (
         selected.length <
         AUTO_COUNTY_SETTINGS.minimumItems
-    ) {
-
-        const alreadySelected =
-            new Set(
-                selected.map(
-                    material =>
-                        material.src
-                )
-            );
-
-        const remaining =
-            materials.filter(
-                material =>
-                    !alreadySelected.has(
-                        material.src
-                    )
-            );
-
-        selected.push(
-            ...chooseMaterials(
-                remaining,
-                AUTO_COUNTY_SETTINGS.minimumItems -
-                    selected.length
-            )
-        );
-    }
-
-    /*
-     * Limit the total number of materials.
-     */
-    const targetCount =
-        randomInteger(
-            AUTO_COUNTY_SETTINGS.minimumItems,
-            AUTO_COUNTY_SETTINGS.maximumItems
-        );
-
-    if (
-        selected.length >
-        targetCount
-    ) {
-        selected =
-            shuffleArray(
-                selected
-            ).slice(
-                0,
-                targetCount
-            );
-    }
-
-    /*
-     * If there are still fewer materials than
-     * the target, fill from unused materials.
-     */
-    if (
-        selected.length <
-        targetCount
     ) {
 
         const selectedSources =
@@ -2631,6 +3523,7 @@ function buildAutomaticCountySelection(
                 )
             );
 
+
         const remaining =
             materials.filter(
                 material =>
@@ -2639,23 +3532,49 @@ function buildAutomaticCountySelection(
                     )
             );
 
+
         selected.push(
             ...chooseMaterials(
                 remaining,
-                targetCount -
-                    selected.length
+                AUTO_COUNTY_SETTINGS.minimumItems -
+                selected.length
             )
         );
+
     }
 
+
+    const targetCount =
+        randomInteger(
+            AUTO_COUNTY_SETTINGS.minimumItems,
+            AUTO_COUNTY_SETTINGS.maximumItems
+        );
+
+
+    if (
+        selected.length >
+        targetCount
+    ) {
+
+        selected =
+            shuffleArray(
+                selected
+            ).slice(
+                0,
+                targetCount
+            );
+
+    }
+
+
     return selected;
+
 }
 
 
-/*
- * Apply automatic position, size, rotation,
- * and layer order.
- */
+/* =========================================================
+   PLACE AUTOMATIC ITEM
+========================================================= */
 
 function placeAutomaticCountyItem(
     item,
@@ -2671,11 +3590,6 @@ function placeAutomaticCountyItem(
     const canvasHeight =
         canvas.clientHeight;
 
-
-    /*
-     * Buildings tend to be larger and lower,
-     * creating a loose "county scene".
-     */
 
     let width;
 
@@ -2709,13 +3623,9 @@ function placeAutomaticCountyItem(
                 AUTO_COUNTY_SETTINGS.minimumWidth,
                 210
             );
+
     }
 
-
-    /*
-     * Keep the item inside a reasonable
-     * portion of the canvas.
-     */
 
     width =
         Math.min(
@@ -2723,7 +3633,8 @@ function placeAutomaticCountyItem(
             Math.max(
                 60,
                 canvasWidth -
-                    AUTO_COUNTY_SETTINGS.edgePadding * 2
+                AUTO_COUNTY_SETTINGS.edgePadding *
+                2
             )
         );
 
@@ -2732,13 +3643,9 @@ function placeAutomaticCountyItem(
         `${width}px`;
 
 
-    /*
-     * Force a browser layout so that the
-     * actual item dimensions are available.
-     */
-
     const itemWidth =
-        item.offsetWidth || width;
+        item.offsetWidth ||
+        width;
 
 
     const itemHeight =
@@ -2749,22 +3656,25 @@ function placeAutomaticCountyItem(
     const maxLeft =
         Math.max(
             AUTO_COUNTY_SETTINGS.edgePadding,
+
             canvasWidth -
-                itemWidth -
-                AUTO_COUNTY_SETTINGS.edgePadding
+            itemWidth -
+            AUTO_COUNTY_SETTINGS.edgePadding
         );
 
 
     const maxTop =
         Math.max(
             AUTO_COUNTY_SETTINGS.edgePadding,
+
             canvasHeight -
-                itemHeight -
-                AUTO_COUNTY_SETTINGS.edgePadding
+            itemHeight -
+            AUTO_COUNTY_SETTINGS.edgePadding
         );
 
 
     let left;
+
     let top;
 
 
@@ -2772,11 +3682,6 @@ function placeAutomaticCountyItem(
         material.category ===
         "buildings"
     ) {
-
-        /*
-         * Buildings stay mostly toward the
-         * lower / background area.
-         */
 
         left =
             randomBetween(
@@ -2789,7 +3694,8 @@ function placeAutomaticCountyItem(
             randomBetween(
                 Math.max(
                     AUTO_COUNTY_SETTINGS.edgePadding,
-                    canvasHeight * 0.35
+                    canvasHeight *
+                    0.35
                 ),
                 maxTop
             );
@@ -2799,16 +3705,15 @@ function placeAutomaticCountyItem(
         "people"
     ) {
 
-        /*
-         * People are more likely to appear
-         * in the middle of the scene.
-         */
-
         left =
             randomBetween(
-                canvasWidth * 0.15,
+                canvasWidth *
+                0.15,
+
                 Math.max(
-                    canvasWidth * 0.15,
+                    canvasWidth *
+                    0.15,
+
                     maxLeft
                 )
             );
@@ -2816,19 +3721,18 @@ function placeAutomaticCountyItem(
 
         top =
             randomBetween(
-                canvasHeight * 0.20,
+                canvasHeight *
+                0.20,
+
                 Math.max(
-                    canvasHeight * 0.20,
+                    canvasHeight *
+                    0.20,
+
                     maxTop
                 )
             );
 
     } else {
-
-        /*
-         * Objects can appear almost anywhere,
-         * between buildings and people.
-         */
 
         left =
             randomBetween(
@@ -2839,23 +3743,24 @@ function placeAutomaticCountyItem(
 
         top =
             randomBetween(
-                canvasHeight * 0.20,
+                canvasHeight *
+                0.20,
+
                 Math.max(
-                    canvasHeight * 0.20,
+                    canvasHeight *
+                    0.20,
+
                     maxTop
                 )
             );
+
     }
 
-
-    /*
-     * Clamp values so that unusual image
-     * dimensions do not push the item outside.
-     */
 
     left =
         Math.max(
             AUTO_COUNTY_SETTINGS.edgePadding,
+
             Math.min(
                 left,
                 maxLeft
@@ -2866,6 +3771,7 @@ function placeAutomaticCountyItem(
     top =
         Math.max(
             AUTO_COUNTY_SETTINGS.edgePadding,
+
             Math.min(
                 top,
                 maxTop
@@ -2881,21 +3787,12 @@ function placeAutomaticCountyItem(
         `${top}px`;
 
 
-    /*
-     * Small random rotation.
-     */
-
     item.dataset.rotation =
         randomBetween(
             AUTO_COUNTY_SETTINGS.minimumRotation,
             AUTO_COUNTY_SETTINGS.maximumRotation
         );
 
-
-    /*
-     * Keep scale at 1 because the actual
-     * width already controls the size.
-     */
 
     item.dataset.scale =
         "1";
@@ -2907,13 +3804,11 @@ function placeAutomaticCountyItem(
 
 
     /*
-     * Layer order:
-     * buildings behind,
-     * objects in the middle,
-     * people in front.
+     * Layer:
      *
-     * The small random offset keeps the
-     * result from becoming completely fixed.
+     * buildings → back
+     * objects   → middle
+     * people    → front
      */
 
     let baseLayer;
@@ -2924,18 +3819,22 @@ function placeAutomaticCountyItem(
         "buildings"
     ) {
 
-        baseLayer = 10;
+        baseLayer =
+            10;
 
     } else if (
         material.category ===
         "objects"
     ) {
 
-        baseLayer = 100;
+        baseLayer =
+            100;
 
     } else {
 
-        baseLayer = 200;
+        baseLayer =
+            200;
+
     }
 
 
@@ -2946,212 +3845,152 @@ function placeAutomaticCountyItem(
             0,
             20
         );
+
 }
-    
 
 
-/*
- * Main function.
- *
- * MAKE ANOTHER COUNTY:
- *
- * 1. Read the current shared material library.
- * 2. Choose a new combination.
- * 3. Clear only the current canvas.
- * 4. Add the chosen materials.
- * 5. Randomly construct a new county.
- *
- * Supabase data is NOT changed.
- */
+/* =========================================================
+   MAKE ANOTHER COUNTY
+========================================================= */
+
 async function makeAnotherCounty() {
 
     if (!canvas) {
+
         return;
+
     }
+
 
     const materials =
         getAvailableCountyMaterials();
 
-    if (!materials.length) {
+
+    if (
+        !materials.length
+    ) {
+
         alert(
             "No materials are available yet."
         );
+
         return;
+
     }
 
-    /*
-     * Select a new combination.
-     */
-    const selectedMaterials =
+
+    const selection =
         buildAutomaticCountySelection(
             materials
         );
 
-    if (!selectedMaterials.length) {
+
+    if (
+        !selection.length
+    ) {
+
         alert(
             "Not enough materials to make another county."
         );
+
         return;
+
     }
 
-    /*
-     * Remove only the items currently
-     * displayed on the canvas.
-     *
-     * This does NOT remove material cards,
-     * uploaded files, or Supabase records.
-     */
+
     canvas
         .querySelectorAll(
             ".canvas-item"
         )
         .forEach(
-            item => item.remove()
+            item => {
+
+                item.remove();
+
+            }
         );
+
 
     selectedCanvasItem =
         null;
 
+
     highestZIndex =
         1;
 
-    /*
-     * Shuffle once more so the visual order
-     * changes every time the button is pressed.
-     */
-    const shuffledMaterials =
+
+    const shuffled =
         shuffleArray(
-            selectedMaterials
+            selection
         );
 
-    /*
-     * Add each material using the existing
-     * canvas system. This preserves all
-     * existing controls:
-     *
-     * DELETE
-     * BRING TO FRONT
-     * BRING FORWARD
-     * SEND BACKWARD
-     * SEND TO BACK
-     * ROTATE
-     * RESIZE
-     */
-    shuffledMaterials.forEach(
-        (material, index) => {
 
-            addImageToCanvas(
-                material.src,
-                material.alt
-            );
-
-            const items =
-                canvas.querySelectorAll(
-                    ".canvas-item"
-                );
+    shuffled.forEach(
+        (
+            material,
+            index
+        ) => {
 
             const item =
-                items[
-                    items.length - 1
-                ];
+                addImageToCanvas(
+                    material.src,
+                    material.alt,
+                    {
+                        category:
+                            material.category
+                    }
+                );
+
 
             if (!item) {
+
                 return;
+
             }
+
 
             placeAutomaticCountyItem(
                 item,
                 material,
                 index,
-                shuffledMaterials.length
+                shuffled.length
             );
+
         }
     );
 
-    /*
-     * The automatic generator should present
-     * the result as a finished county, not as
-     * an actively selected editing object.
-     */
+
     deselectAllCanvasItems();
+
 }
 
 
-/*
- * If the HTML already contains the button,
- * use it directly.
- *
- * If it does not, create it automatically
- * next to CLEAR.
- *
- * This makes this JavaScript compatible with
- * both the original index.html and the
- * modified MAKE ANOTHER COUNTY index.html.
- */
-function setupMakeAnotherCountyButton() {
+/* =========================================================
+   MAKE ANOTHER COUNTY BUTTON
+========================================================= */
 
-    if (!canvas || !clearCanvasBtn) {
-        return;
-    }
+if (
+    makeAnotherCountyBtn
+) {
 
-    let button =
-        document.getElementById(
-            "makeAnotherCountyBtn"
-        );
-
-    if (!button) {
-
-        button =
-            document.createElement(
-                "button"
-            );
-
-        button.id =
-            "makeAnotherCountyBtn";
-
-        button.type =
-            "button";
-
-        button.textContent =
-            "MAKE ANOTHER COUNTY";
-
-        /*
-         * Put the new button before CLEAR.
-         */
-        clearCanvasBtn.parentNode.insertBefore(
-            button,
-            clearCanvasBtn
-        );
-    }
-
-    /*
-     * Prevent duplicate event listeners
-     * if this function is ever called again.
-     */
-    if (
-        button.dataset.countyButtonBound ===
-        "true"
-    ) {
-        return;
-    }
-
-    button.dataset.countyButtonBound =
-        "true";
-
-    button.addEventListener(
+    makeAnotherCountyBtn.addEventListener(
         "click",
         async () => {
 
-            button.disabled =
+            const originalText =
+                makeAnotherCountyBtn.textContent;
+
+
+            makeAnotherCountyBtn.disabled =
                 true;
 
-            const originalText =
-                button.textContent;
 
-            button.textContent =
+            makeAnotherCountyBtn.textContent =
                 "MAKING COUNTY...";
 
+
             try {
+
                 await makeAnotherCounty();
 
             } catch (error) {
@@ -3161,20 +4000,25 @@ function setupMakeAnotherCountyButton() {
                     error
                 );
 
+
                 alert(
                     "Could not make another county."
                 );
 
             } finally {
 
-                button.disabled =
+                makeAnotherCountyBtn.disabled =
                     false;
 
-                button.textContent =
+
+                makeAnotherCountyBtn.textContent =
                     originalText;
+
             }
+
         }
     );
+
 }
 
 
@@ -3182,77 +4026,472 @@ function setupMakeAnotherCountyButton() {
    CLEAR CANVAS
 ========================================================= */
 
-clearCanvasBtn.addEventListener(
-    "click",
-    () => {
+if (
+    clearCanvasBtn
+) {
 
-        const confirmed =
-            window.confirm(
-                "Clear all elements from the canvas?"
-            );
+    clearCanvasBtn.addEventListener(
+        "click",
+        () => {
 
-        if (!confirmed) {
-            return;
+            const confirmed =
+                window.confirm(
+                    "Clear all elements from the canvas?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            canvas
+                .querySelectorAll(
+                    ".canvas-item"
+                )
+                .forEach(
+                    item => {
+
+                        item.remove();
+
+                    }
+                );
+
+
+            selectedCanvasItem =
+                null;
+
+
+            highestZIndex =
+                1;
+
+
+            hideDialogueStylePanel();
+
         }
+    );
 
-        document
-            .querySelectorAll(
-                ".canvas-item"
-            )
-            .forEach(
-                item => {
-                    item.remove();
-                }
-            );
-
-        selectedCanvasItem =
-            null;
-
-        highestZIndex =
-            1;
-    }
-);
+}
 
 
 /* =========================================================
-   CLEAR CANVAS
+   EXPORT PNG
 ========================================================= */
 
-clearCanvasBtn.addEventListener(
-    "click",
-    () => {
+async function loadHtml2Canvas() {
 
-        const confirmed =
-            window.confirm(
-                "Clear all elements from the canvas?"
+    if (
+        typeof window.html2canvas ===
+        "function"
+    ) {
+
+        return window.html2canvas;
+
+    }
+
+
+    return new Promise(
+        (
+            resolve,
+            reject
+        ) => {
+
+            const existing =
+                document.querySelector(
+                    'script[data-county-html2canvas="true"]'
+                );
+
+
+            if (existing) {
+
+                existing.addEventListener(
+                    "load",
+                    () => {
+
+                        if (
+                            typeof window.html2canvas ===
+                            "function"
+                        ) {
+
+                            resolve(
+                                window.html2canvas
+                            );
+
+                        } else {
+
+                            reject(
+                                new Error(
+                                    "html2canvas unavailable."
+                                )
+                            );
+
+                        }
+
+                    },
+                    {
+                        once:
+                            true
+                    }
+                );
+
+
+                existing.addEventListener(
+                    "error",
+                    () => {
+
+                        reject(
+                            new Error(
+                                "Could not load html2canvas."
+                            )
+                        );
+
+                    },
+                    {
+                        once:
+                            true
+                    }
+                );
+
+
+                return;
+
+            }
+
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+
+
+            script.async =
+                true;
+
+
+            script.dataset.countyHtml2canvas =
+                "true";
+
+
+            script.onload =
+                () => {
+
+                    if (
+                        typeof window.html2canvas ===
+                        "function"
+                    ) {
+
+                        resolve(
+                            window.html2canvas
+                        );
+
+                    } else {
+
+                        reject(
+                            new Error(
+                                "html2canvas unavailable."
+                            )
+                        );
+
+                    }
+
+                };
+
+
+            script.onerror =
+                () => {
+
+                    reject(
+                        new Error(
+                            "Could not load html2canvas."
+                        )
+                    );
+
+                };
+
+
+            document.head.appendChild(
+                script
             );
 
+        }
+    );
 
-        if (!confirmed) {
-            return;
+}
+
+
+async function exportCanvasAsPNG() {
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    const exportBtn =
+        document.getElementById(
+            "exportCanvasBtn"
+        );
+
+
+    const originalSelected =
+        selectedCanvasItem;
+
+
+    const selectedItems =
+        Array.from(
+            canvas.querySelectorAll(
+                ".canvas-item.selected"
+            )
+        );
+
+
+    try {
+
+        if (exportBtn) {
+
+            exportBtn.disabled =
+                true;
+
+            exportBtn.textContent =
+                "EXPORTING...";
+
         }
 
 
-        document
-            .querySelectorAll(
-                ".canvas-item"
-            )
-            .forEach(
-                item => {
-                    item.remove();
+        await loadHtml2Canvas();
+
+
+        selectedItems.forEach(
+            item => {
+
+                item.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+        await new Promise(
+            resolve =>
+                requestAnimationFrame(
+                    resolve
+                )
+        );
+
+
+        const controls =
+            Array.from(
+                canvas.querySelectorAll(
+                    ".canvas-control"
+                )
+            );
+
+
+        controls.forEach(
+            control => {
+
+                control.style.visibility =
+                    "hidden";
+
+            }
+        );
+
+
+        const exportedCanvas =
+            await window.html2canvas(
+                canvas,
+                {
+
+                    backgroundColor:
+                        "#f4f1ea",
+
+                    useCORS:
+                        true,
+
+                    allowTaint:
+                        false,
+
+                    scale:
+                        2,
+
+                    logging:
+                        false,
+
+                    imageTimeout:
+                        15000
+
                 }
             );
 
 
-        selectedCanvasItem =
-            null;
+        controls.forEach(
+            control => {
+
+                control.style.visibility =
+                    "";
+
+            }
+        );
 
 
-        highestZIndex =
-            1;
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.download =
+            `county-literature-${Date.now()}.png`;
+
+
+        link.href =
+            exportedCanvas.toDataURL(
+                "image/png"
+            );
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+    } catch (error) {
+
+        console.error(
+            "Canvas export failed:",
+            error
+        );
+
+
+        alert(
+            "Export failed. Please try again."
+        );
+
+    } finally {
+
+        canvas
+            .querySelectorAll(
+                ".canvas-control"
+            )
+            .forEach(
+                control => {
+
+                    control.style.visibility =
+                        "";
+
+                }
+            );
+
+
+        if (
+            originalSelected &&
+            originalSelected.isConnected
+        ) {
+
+            selectCanvasItem(
+                originalSelected
+            );
+
+        }
+
+
+        if (exportBtn) {
+
+            exportBtn.disabled =
+                false;
+
+            exportBtn.textContent =
+                "EXPORT";
+
+        }
+
     }
-);
 
+}
+
+
+/* =========================================================
+   EXPORT BUTTON
+========================================================= */
+
+function setupExportButton() {
+
+    if (
+        !clearCanvasBtn
+    ) {
+
+        return;
+
+    }
+
+
+    const actions =
+        clearCanvasBtn.parentElement;
+
+
+    if (!actions) {
+
+        return;
+
+    }
+
+
+    let exportBtn =
+        document.getElementById(
+            "exportCanvasBtn"
+        );
+
+
+    if (exportBtn) {
+
+        return;
+
+    }
+
+
+    exportBtn =
+        document.createElement(
+            "button"
+        );
+
+
+    exportBtn.id =
+        "exportCanvasBtn";
+
+
+    exportBtn.type =
+        "button";
+
+
+    exportBtn.textContent =
+        "EXPORT";
+
+
+    actions.appendChild(
+        exportBtn
+    );
+
+
+    exportBtn.addEventListener(
+        "click",
+        exportCanvasAsPNG
+    );
+
+}
 
 
 /* =========================================================
@@ -3265,10 +4504,14 @@ let syncInterval =
 
 function startMaterialSync() {
 
-    if (syncInterval) {
+    if (
+        syncInterval
+    ) {
+
         clearInterval(
             syncInterval
         );
+
     }
 
 
@@ -3276,11 +4519,19 @@ function startMaterialSync() {
         setInterval(
             () => {
 
-                loadMaterials();
+                if (
+                    document.visibilityState ===
+                    "visible"
+                ) {
+
+                    loadMaterials();
+
+                }
 
             },
             5000
         );
+
 }
 
 
@@ -3301,421 +4552,47 @@ document.addEventListener(
 );
 
 
-
-/* =========================================================
-   EXPORT CANVAS
-   Self-contained: creates the EXPORT button and loads
-   html2canvas automatically. No index.html/CSS edit needed.
-========================================================= */
-
-(function setupCanvasExport() {
-
-    if (!canvas || !clearCanvasBtn) {
-        return;
-    }
-
-    /* Create a small action wrapper if it does not exist. */
-    let actions =
-        clearCanvasBtn.parentElement &&
-        clearCanvasBtn.parentElement.classList.contains(
-            "canvas-actions"
-        )
-            ? clearCanvasBtn.parentElement
-            : null;
-
-    if (!actions) {
-        actions =
-            document.createElement("div");
-
-        actions.className =
-            "canvas-actions";
-
-        clearCanvasBtn.parentNode.insertBefore(
-            actions,
-            clearCanvasBtn
-        );
-
-        actions.appendChild(
-            clearCanvasBtn
-        );
-    }
-
-    let exportBtn =
-        document.getElementById(
-            "exportCanvasBtn"
-        );
-
-    if (!exportBtn) {
-
-        exportBtn =
-            document.createElement("button");
-
-        exportBtn.id =
-            "exportCanvasBtn";
-
-        exportBtn.type =
-            "button";
-
-        exportBtn.textContent =
-            "EXPORT";
-
-        actions.appendChild(
-            exportBtn
-        );
-    }
-
-    /* Minimal styling so this works without editing style.css. */
-    actions.style.display = "flex";
-    actions.style.alignItems = "center";
-    actions.style.gap = "6px";
-
-    exportBtn.style.height = "30px";
-    exportBtn.style.padding = "0 14px";
-    exportBtn.style.border = "1px solid #111";
-    exportBtn.style.background = "#111";
-    exportBtn.style.color = "#f4f1ea";
-    exportBtn.style.cursor = "pointer";
-    exportBtn.style.fontSize = "10px";
-    exportBtn.style.letterSpacing = "0.08em";
-
-    exportBtn.addEventListener(
-        "mouseenter",
-        () => {
-            exportBtn.style.background =
-                "transparent";
-            exportBtn.style.color =
-                "#111";
-        }
-    );
-
-    exportBtn.addEventListener(
-        "mouseleave",
-        () => {
-            exportBtn.style.background =
-                "#111";
-            exportBtn.style.color =
-                "#f4f1ea";
-        }
-    );
-
-    function loadHtml2Canvas() {
-
-        if (
-            typeof window.html2canvas ===
-            "function"
-        ) {
-            return Promise.resolve(
-                window.html2canvas
-            );
-        }
-
-        return new Promise(
-            (resolve, reject) => {
-
-                const existing =
-                    document.querySelector(
-                        'script[data-county-html2canvas="true"]'
-                    );
-
-                if (existing) {
-
-                    existing.addEventListener(
-                        "load",
-                        () => {
-                            if (
-                                typeof window.html2canvas ===
-                                "function"
-                            ) {
-                                resolve(
-                                    window.html2canvas
-                                );
-                            } else {
-                                reject(
-                                    new Error(
-                                        "html2canvas loaded but is unavailable."
-                                    )
-                                );
-                            }
-                        },
-                        { once: true }
-                    );
-
-                    existing.addEventListener(
-                        "error",
-                        () => {
-                            reject(
-                                new Error(
-                                    "Could not load html2canvas."
-                                )
-                            );
-                        },
-                        { once: true }
-                    );
-
-                    return;
-                }
-
-                const script =
-                    document.createElement(
-                        "script"
-                    );
-
-                script.src =
-                    "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-
-                script.async = true;
-
-                script.dataset.countyHtml2canvas =
-                    "true";
-
-                script.onload =
-                    () => {
-
-                        if (
-                            typeof window.html2canvas ===
-                            "function"
-                        ) {
-                            resolve(
-                                window.html2canvas
-                            );
-                        } else {
-                            reject(
-                                new Error(
-                                    "html2canvas is unavailable."
-                                )
-                            );
-                        }
-                    };
-
-                script.onerror =
-                    () => {
-                        reject(
-                            new Error(
-                                "Could not load html2canvas."
-                            )
-                        );
-                    };
-
-                document.head.appendChild(
-                    script
-                );
-            }
-        );
-    }
-
-    exportBtn.addEventListener(
-        "click",
-        async () => {
-
-            const originalText =
-                exportBtn.textContent;
-
-            exportBtn.disabled = true;
-            exportBtn.textContent =
-                "EXPORTING...";
-
-            try {
-
-                await loadHtml2Canvas();
-
-                /*
-                 * Remember current selection and inline background.
-                 */
-                const selectedItems =
-                    Array.from(
-                        document.querySelectorAll(
-                            ".canvas-item.selected"
-                        )
-                    );
-
-                const controls =
-                    Array.from(
-                        canvas.querySelectorAll(
-                            ".canvas-control"
-                        )
-                    );
-
-                const originalBackground =
-                    canvas.style.background;
-
-                /*
-                 * Hide editing UI during capture.
-                 */
-                selectedItems.forEach(
-                    item => {
-                        item.classList.remove(
-                            "selected"
-                        );
-                    }
-                );
-
-                controls.forEach(
-                    control => {
-                        control.style.visibility =
-                            "hidden";
-                    }
-                );
-
-                /*
-                 * Export a clean canvas without the editor grid.
-                 */
-                canvas.style.background =
-                    "#f4f1ea";
-
-                await new Promise(
-                    resolve =>
-                        requestAnimationFrame(
-                            () => requestAnimationFrame(
-                                resolve
-                            )
-                        )
-                );
-
-                const exportedCanvas =
-                    await window.html2canvas(
-                        canvas,
-                        {
-                            backgroundColor:
-                                "#f4f1ea",
-                            useCORS: true,
-                            allowTaint: false,
-                            scale: 2,
-                            logging: false
-                        }
-                    );
-
-                /*
-                 * Restore editor state.
-                 */
-                canvas.style.background =
-                    originalBackground;
-
-                controls.forEach(
-                    control => {
-                        control.style.visibility =
-                            "";
-                    }
-                );
-
-                selectedItems.forEach(
-                    item => {
-                        item.classList.add(
-                            "selected"
-                        );
-                    }
-                );
-
-                const dataURL =
-                    exportedCanvas.toDataURL(
-                        "image/png"
-                    );
-
-                const link =
-                    document.createElement(
-                        "a"
-                    );
-
-                link.download =
-                    "county-literature.png";
-
-                link.href =
-                    dataURL;
-
-                document.body.appendChild(
-                    link
-                );
-
-                link.click();
-
-                link.remove();
-
-            } catch (error) {
-
-                console.error(
-                    "Canvas export failed:",
-                    error
-                );
-
-                alert(
-                    "Export failed. Please check your internet connection and try again."
-                );
-
-            } finally {
-
-                /*
-                 * Safety restore in case html2canvas throws.
-                 */
-                canvas.style.background = "";
-
-                canvas
-                    .querySelectorAll(
-                        ".canvas-control"
-                    )
-                    .forEach(
-                        control => {
-                            control.style.visibility =
-                                "";
-                        }
-                    );
-
-                exportBtn.disabled =
-                    false;
-
-                exportBtn.textContent =
-                    originalText;
-            }
-        }
-    );
-
-})();
-
 /* =========================================================
    INITIALIZATION
 ========================================================= */
 
 async function initialize() {
 
-    /*
-     * Static materials first.
-     */
+    console.log(
+        "COUNTY LITERATURE initializing..."
+    );
+
 
     applyStaticMaterialState();
+
 
     bindStaticMaterials();
 
 
-    /*
-     * MAKE ANOTHER COUNTY button.
-     */
-    setupMakeAnotherCountyButton();
-
-    /*
-     * Upload buttons.
-     */
-
     bindUploadButtons();
 
 
-    /*
-     * Supabase anonymous session.
-     */
+    setupExportButton();
+
 
     await ensureAnonymousAuth();
 
 
-    /*
-     * Load shared materials.
-     */
-
     await loadMaterials();
 
 
-    /*
-     * Start automatic refresh.
-     */
-
     startMaterialSync();
+
+
+    console.log(
+        "COUNTY LITERATURE ready."
+    );
+
 }
 
+
+/* =========================================================
+   START
+========================================================= */
 
 initialize();
