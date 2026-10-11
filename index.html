@@ -1,1146 +1,2320 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
+
 
 <head>
 
+
+
     <meta charset="UTF-8">
 
+
+
     <meta
+
         name="viewport"
+
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+
     >
 
-    <title>COUNTY LITERATURE</title>
+
+
+    <title>COUNTY CHRONICLES</title>
+
+
 
     <link
+
         rel="stylesheet"
+
         href="style.css"
+
     >
 
+
+
 </head>
+
+
+
 
 
 <body>
 
 
+
+
+
 <!-- =====================================================
+
      HEADER
+
 ====================================================== -->
+
+
 
 <header class="site-header">
 
+
+
     <div class="header-left">
 
+
+
         <h1>
-            COUNTY LITERATURE
+
+            COUNTY CHRONICLES
+
         </h1>
 
+
+
         <p>
-            A SHARED MATERIAL LIBRARY
+
+            THE AUTHENTICITY FACTORY
+
         </p>
+
+
 
     </div>
 
+
+
+<div class="platform-header-status"><span class="live-dot"></span> FOR YOU / #COUNTYCORE <span class="header-disclaimer">A SATIRICAL PLATFORM</span></div>
 </header>
 
 
 
+
+
+
+
 <!-- =====================================================
+
      MAIN
+
 ====================================================== -->
+
+
 
 <main class="main-layout">
 
 
+
+
+
     <!-- =================================================
-         MATERIAL LIBRARY
+
+         CONTENT FACTORY
+
     ================================================== -->
+
+
 
     <section class="library">
 
 
+
+
+
         <!-- ---------------------------------------------
+
              LIBRARY HEADER
+
         ---------------------------------------------- -->
+
+
 
         <div class="library-header">
 
+
+
             <div>
 
+
+
                 <h2>
-                    MATERIAL LIBRARY
+
+                    CONTENT FACTORY
+
                 </h2>
 
+
+
                 <p>
-                    COLLECT · CLASSIFY · REUSE
+
+                    YOUR REALITY. OUR CATEGORIES.
+
                 </p>
 
+
+
             </div>
+
+
+
 
 
             <div class="upload-area">
 
 
+
+
+
                 <select id="uploadCategory">
 
+
+
                     <option value="people">
+
                         PEOPLE
+
                     </option>
+
+
 
                     <option value="objects">
+
                         OBJECTS
+
                     </option>
 
+
+
                     <option value="buildings">
+
                         BUILDINGS
+
                     </option>
+
+
 
                 </select>
 
 
+
+
+
                 <input
+
                     type="file"
+
                     id="cameraInput"
+
                     accept="image/*"
+
                     capture="environment"
+
                     hidden
+
                 >
+
+
+
 
 
                 <input
+
                     type="file"
+
                     id="albumInput"
+
                     accept="image/*"
+
                     hidden
+
                 >
 
 
+
+
+
                 <button
+
                     id="takePhotoBtn"
+
                     type="button"
+
                 >
-                    + TAKE PHOTO
+
+                    + CAMERA
+
                 </button>
+
+
+
 
 
                 <button
+
                     id="fromAlbumBtn"
+
                     type="button"
+
                 >
-                    + FROM ALBUM
+
+                    + UPLOAD
+
                 </button>
+
+
 
             </div>
+
+
 
         </div>
 
 
 
+
+
+
+
         <!-- =================================================
+
              PEOPLE
+
         ================================================== -->
 
+
+
         <section
+
             class="material-category"
+
             data-category="people"
+
         >
 
+
+
             <div class="category-title">
+
                 PEOPLE
+
             </div>
 
 
+
+
+
             <div
+
                 class="material-grid"
+
                 id="peopleMaterials"
+
             >
+
+
+
 
 
                 <!-- PEOPLE 01 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="people-01"
+
                 >
 
+
+
                     <img
+
                         src="images/person01.png"
+
                         alt="People 01"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option
+
                                 value="people"
+
                                 selected
+
                             >
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- PEOPLE 02 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="people-02"
+
                 >
 
+
+
                     <img
+
                         src="images/person02.png"
+
                         alt="People 02"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people" selected>
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- PEOPLE 03 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="people-03"
+
                 >
 
+
+
                     <img
+
                         src="images/person03.png"
+
                         alt="People 03"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people" selected>
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- PEOPLE 04 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="people-04"
+
                 >
 
+
+
                     <img
+
                         src="images/person04.png"
+
                         alt="People 04"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people" selected>
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- PEOPLE 05 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="people-05"
+
                 >
 
+
+
                     <img
+
                         src="images/person05.png"
+
                         alt="People 05"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people" selected>
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- PEOPLE 06 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="people-06"
+
                 >
 
+
+
                     <img
+
                         src="images/person06.png"
+
                         alt="People 06"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people" selected>
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
 
+
+
             </div>
+
+
 
         </section>
 
 
 
+
+
+
+
         <!-- =================================================
+
              OBJECTS
+
         ================================================== -->
 
+
+
         <section
+
             class="material-category"
+
             data-category="objects"
+
         >
 
+
+
             <div class="category-title">
+
                 OBJECTS
+
             </div>
 
 
+
+
+
             <div
+
                 class="material-grid"
+
                 id="objectsMaterials"
+
             >
+
+
+
 
 
                 <!-- OBJECT 01 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="objects-01"
+
                 >
 
+
+
                     <img
+
                         src="images/object01.png"
+
                         alt="Objects 01"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects" selected>
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- OBJECT 02 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="objects-02"
+
                 >
 
+
+
                     <img
+
                         src="images/object02.png"
+
                         alt="Objects 02"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects" selected>
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- OBJECT 03 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="objects-03"
+
                 >
 
+
+
                     <img
+
                         src="images/object03.png"
+
                         alt="Objects 03"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects" selected>
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- OBJECT 04 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="objects-04"
+
                 >
 
+
+
                     <img
+
                         src="images/object04.png"
+
                         alt="Objects 04"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects" selected>
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- OBJECT 05 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="objects-05"
+
                 >
 
+
+
                     <img
+
                         src="images/object05.png"
+
                         alt="Objects 05"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects" selected>
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- OBJECT 06 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="objects-06"
+
                 >
 
+
+
                     <img
+
                         src="images/object06.png"
+
                         alt="Objects 06"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects" selected>
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings">
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
 
             </div>
 
+
+
         </section>
+
+
+
+
 
 
 
         <!-- =================================================
+
              BUILDINGS
+
         ================================================== -->
 
+
+
         <section
+
             class="material-category"
+
             data-category="buildings"
+
         >
 
+
+
             <div class="category-title">
+
                 BUILDINGS
+
             </div>
 
 
+
+
+
             <div
+
                 class="material-grid"
+
                 id="buildingsMaterials"
+
             >
+
+
+
 
 
                 <!-- BUILDING 01 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="buildings-01"
+
                 >
 
+
+
                     <img
+
                         src="images/building01.png"
+
                         alt="Buildings 01"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings" selected>
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- BUILDING 02 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="buildings-02"
+
                 >
 
+
+
                     <img
+
                         src="images/building02.png"
+
                         alt="Buildings 02"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings" selected>
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- BUILDING 03 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="buildings-03"
+
                 >
 
+
+
                     <img
+
                         src="images/building03.png"
+
                         alt="Buildings 03"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings" selected>
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- BUILDING 04 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="buildings-04"
+
                 >
 
+
+
                     <img
+
                         src="images/building04.png"
+
                         alt="Buildings 04"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings" selected>
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- BUILDING 05 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="buildings-05"
+
                 >
 
+
+
                     <img
+
                         src="images/building05.png"
+
                         alt="Buildings 05"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings" selected>
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <!-- BUILDING 06 -->
 
+
+
                 <div
+
                     class="material-card static-material"
+
                     data-static-id="buildings-06"
+
                 >
 
+
+
                     <img
+
                         src="images/building06.png"
+
                         alt="Buildings 06"
+
                         draggable="false"
+
                     >
+
+
 
                     <div class="material-menu">
 
+
+
                         <select class="material-category-select">
 
+
+
                             <option value="people">
+
                                 PEOPLE
+
                             </option>
+
+
 
                             <option value="objects">
+
                                 OBJECTS
+
                             </option>
 
+
+
                             <option value="buildings" selected>
+
                                 BUILDINGS
+
                             </option>
+
+
 
                         </select>
 
+
+
                         <button
+
                             type="button"
+
                             class="material-delete"
+
                             aria-label="Delete"
+
                             title="Delete"
+
                         >
+
                             ×
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
 
             </div>
 
+
+
         </section>
 
+
+
     </section>
+
+
+
+
 
 
 
     <!-- =================================================
+
          CANVAS
+
     ================================================== -->
+
+
 
     <section class="canvas-section">
 
 
+
+
+
         <div class="canvas-header">
+
+
 
             <div>
 
+
+
                 <h2>
+
                     CANVAS
+
                 </h2>
 
+
+
                 <p>
-                    COMPOSE YOUR COUNTY
+
+                    BUILD YOUR OWN VERSION OF REALITY
+
                 </p>
 
+
+
             </div>
+
+
+
 
 
             <div class="canvas-actions">
 
+
+
                 <button
+
                     id="makeAnotherCountyBtn"
+
                     type="button"
+
                 >
-                    MAKE ANOTHER COUNTY
+
+                    LET THE ALGORITHM DECIDE
+
                 </button>
 
 
+
+
+
                 <button
+
                     id="addDialogueBtn"
+
                     type="button"
+
                 >
+
                     + TEXT
+
                 </button>
+
+
+
 
 
                 <button
+
                     id="clearCanvasBtn"
+
                     type="button"
+
                 >
+
                     CLEAR
+
                 </button>
+
+
 
             </div>
+
+
 
         </div>
 
 
+
+
+
         <div
+
             id="canvas"
+
             class="canvas"
+
         ></div>
 
 
+
+
+
         <!-- ---------------------------------------------
+
              DIALOGUE STYLE PANEL
+
         ---------------------------------------------- -->
 
+
+
         <div
+
             id="dialogueStylePanel"
+
             class="dialogue-style-panel"
+
             aria-hidden="true"
+
         >
 
+
+
             <div class="dialogue-style-title">
+
                 TEXT STYLE
+
             </div>
 
 
+
+
+
             <label>
+
+
 
                 TEXT
 
+
+
                 <input
+
                     type="color"
+
                     id="dialogueTextColor"
+
                     value="#111111"
+
                 >
 
+
+
             </label>
+
+
+
 
 
             <label>
 
+
+
                 BORDER
 
+
+
                 <input
+
                     type="color"
+
                     id="dialogueBorderColor"
+
                     value="#111111"
+
                 >
+
+
 
             </label>
 
+
+
         </div>
 
+
+
     </section>
+
+
+
+
+<aside class="verdict-panel" aria-label="Platform verdict — fictional metrics">
+  <div class="verdict-kicker">03 / PLATFORM VERDICT <span class="live-dot"></span></div>
+  <h2>THE REALNESS<br>MACHINE<span class="hot-pink">™</span></h2>
+  <p class="verdict-subtitle">YOUR MEMORY IS BEING OPTIMIZED.</p>
+  <div class="verdict-meter">
+    <div class="verdict-meter-label">PLATFORM-CERTIFIED REALNESS</div>
+    <button type="button" class="verdict-score verdict-score-button" id="realnessScore" aria-label="Reveal how realness is calculated" title="Click to inspect this score">24.0<span>%</span></button>
+    <div class="verdict-track"><div id="realnessFill" class="verdict-fill"></div></div>
+    <div id="realnessStatus" class="verdict-status">INSUFFICIENT REALITY</div>
+    <div id="scoreExplanation" class="score-explanation" hidden>THIS SCORE MEASURES CONFORMITY, NOT REALITY.<small>It rewards the number and categories of cut-outs. No image recognition is performed.</small></div>
+  </div>
+  <div class="metric-grid">
+    <div class="metric"><strong id="fictionalViews">1.2M</strong><span>VIEWS*</span></div>
+    <div class="metric"><strong id="fictionalLikes">99.9K</strong><span>LIKES*</span></div>
+  </div>
+  <div class="verdict-section-label">AUTOMATIC LABELS</div>
+  <div id="platformTags" class="platform-tags"><span>#COUNTYCORE</span><span>#NOSTALGIA</span></div>
+  <div class="verdict-section-label">ALGORITHM SAYS</div>
+  <p id="platformMessage" class="platform-message" aria-live="polite">EVERY PLACE CAN BECOME A COUNTY.</p>
+  <div class="verdict-section-label">PLATFORM ACTIVITY <span class="fiction-label">SIMULATED</span></div>
+  <div id="platformActivity" class="platform-activity" aria-live="polite"><div class="activity-entry">SYSTEM ONLINE — WAITING FOR REALITY.</div></div>
+  <div class="platform-stamp">✓ AUTHENTICITY PENDING</div>
+  <p class="fiction-disclaimer">* All scores, views and likes are fictional. This is an artwork, not an actual recommendation system.</p>
+</aside>
 
 </main>
 
 
 
+
+
+
+
 <!-- =====================================================
+
      LIBRARIES
+
 ====================================================== -->
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+
 <script src="script.js"></script>
+<script src="platform-verdict.js"></script>
 
 
+
+
+
+<div id="platformToast" class="platform-toast" role="status" aria-live="polite"></div>
 </body>
+
+
 
 </html>
